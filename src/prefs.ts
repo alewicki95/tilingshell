@@ -30,6 +30,8 @@ import { gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensio
 // @ts-expect-error "Module exists"
 import * as Config from 'resource:///org/gnome/Shell/Extensions/js/misc/config.js';
 
+import { EdgeSnapMode } from '@settings/settings';
+
 const debug = logger('prefs');
 const RESOURCES_PREFIX = "/org/gnome/Shell/Extensions/tilingshell"; // must match the prefix in resources.gresources.xml
 
@@ -148,7 +150,7 @@ export default class TilingShellExtensionPreferences extends ExtensionPreference
             this._buildSwitchRow(
                 Settings.KEY_ENABLE_SMART_WINDOW_BORDER_RADIUS,
                 _('Smart border radius'),
-                _('Dynamically adapt to the window’s actual border radius'),
+                _("Dynamically adapt to the window's actual border radius"),
             ),
         );
         windowBorderExpanderRow.add_row(
@@ -362,8 +364,58 @@ export default class TilingShellExtensionPreferences extends ExtensionPreference
         );
         activeScreenEdgesGroup.add(edgeTilingOffset);
 
-        // const edgeTilingBehaviourRow = this._buildEdgeTilingBehaviourRow();
-        // activeScreenEdgesGroup.add(edgeTilingBehaviourRow);
+        // Create dropdown for edge snap mode
+        const edgeSnapModeRow = new Adw.ActionRow({
+            title: _('Edge snap behavior'),
+            subtitle: _('Choose how windows snap to screen edges'),
+        });
+
+        const edgeSnapModeModel = new Gtk.StringList();
+        edgeSnapModeModel.append(_('Default - snap to quarters and halves'));
+        edgeSnapModeModel.append(_('Adaptive - snap to corners and edges'));
+        edgeSnapModeModel.append(_('Granular - snap to exact tile'));
+
+        const edgeSnapModeDropdown = new Gtk.DropDown({
+            model: edgeSnapModeModel,
+            valign: Gtk.Align.CENTER,
+        });
+
+        // Convert the current setting value to dropdown index
+        const currentMode = Settings.EDGE_SNAP_MODE;
+        let initialIndex = 0;
+
+        if (currentMode === EdgeSnapMode.ADAPTIVE) initialIndex = 1;
+        else if (currentMode === EdgeSnapMode.GRANULAR) initialIndex = 2;
+
+        edgeSnapModeDropdown.set_selected(initialIndex);
+
+        // Connect the signal to update settings when selection changes
+        edgeSnapModeDropdown.connect('notify::selected', () => {
+            const selected = edgeSnapModeDropdown.get_selected();
+            let newMode: EdgeSnapMode;
+
+            switch (selected) {
+                case 1:
+                    newMode = EdgeSnapMode.ADAPTIVE;
+                    break;
+                case 2:
+                    newMode = EdgeSnapMode.GRANULAR;
+                    break;
+                default:
+                    newMode = EdgeSnapMode.DEFAULT;
+            }
+
+            Settings.EDGE_SNAP_MODE = newMode;
+        });
+
+        edgeSnapModeRow.add_suffix(edgeSnapModeDropdown);
+        Settings.bind(
+            Settings.KEY_ACTIVE_SCREEN_EDGES,
+            edgeSnapModeRow,
+            'sensitive',
+        );
+        activeScreenEdgesGroup.add(edgeSnapModeRow);
+
         prefsPage.add(activeScreenEdgesGroup);
 
         // Windows suggestions section

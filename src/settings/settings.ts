@@ -9,6 +9,12 @@ export enum ActivationKey {
     SUPER,
 }
 
+export enum EdgeSnapMode {
+    DEFAULT = 'default',
+    ADAPTIVE = 'adaptive',
+    GRANULAR = 'granular',
+}
+
 /** ------------- Utility functions ------------- */
 function get_string(key: string): string {
     return (
@@ -114,6 +120,7 @@ export default class Settings {
     static KEY_ENABLE_TILING_SYSTEM_WINDOWS_SUGGESTIONS = 'enable-tiling-system-windows-suggestions';
     static KEY_ENABLE_SNAP_ASSISTANT_WINDOWS_SUGGESTIONS = 'enable-snap-assistant-windows-suggestions';
     static KEY_ENABLE_SCREEN_EDGES_WINDOWS_SUGGESTIONS = 'enable-screen-edges-windows-suggestions';
+    static KEY_EDGE_SNAP_MODE = 'edge-snap-mode';
 
     static SETTING_MOVE_WINDOW_RIGHT = 'move-window-right';
     static SETTING_MOVE_WINDOW_LEFT = 'move-window-left';
@@ -466,6 +473,18 @@ export default class Settings {
 
     static set ENABLE_SCREEN_EDGES_WINDOWS_SUGGESTIONS(val: boolean) {
         set_boolean(Settings.KEY_ENABLE_SCREEN_EDGES_WINDOWS_SUGGESTIONS, val);
+    }
+
+    static get EDGE_SNAP_MODE(): EdgeSnapMode {
+        const value = get_string(Settings.KEY_EDGE_SNAP_MODE);
+        if (Object.values(EdgeSnapMode).includes(value as EdgeSnapMode))
+            return value as EdgeSnapMode;
+
+        return EdgeSnapMode.DEFAULT;
+    }
+
+    static set EDGE_SNAP_MODE(val: EdgeSnapMode) {
+        set_string(Settings.KEY_EDGE_SNAP_MODE, val);
     }
 
     static get_inner_gaps(scaleFactor: number = 1): {
