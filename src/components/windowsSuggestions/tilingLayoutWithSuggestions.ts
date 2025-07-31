@@ -78,6 +78,7 @@ export default class TilingLayoutWithSuggestions extends LayoutWidget<Suggestion
         this._recursivelyShowPopup(nontiledWindows, monitorIndex);
 
         this._signals.disconnect();
+        this._signals.connect(this, 'touch-event', () => this.close());
         this._signals.connect(this, 'key-focus-out', () => this.close());
         this._signals.connect(this, 'button-press-event', () => {
             // if a window clone is pressed by a button, it will stop propagating the event
@@ -186,8 +187,7 @@ export default class TilingLayoutWithSuggestions extends LayoutWidget<Suggestion
                 });
             });
 
-            // when the clone is selected by the user
-            winClone.connect('button-press-event', () => {
+            const onSuggestionPress = () => {
                 // we will focus it later, after the animation and if any other window is tiled
                 this._lastTiledWindow = nonTiledWin;
                 // place this window on TOP of everyone ()
@@ -244,7 +244,12 @@ export default class TilingLayoutWithSuggestions extends LayoutWidget<Suggestion
                 preview.close(true);
                 this._recursivelyShowPopup(nontiledWindows, monitorIndex);
                 return Clutter.EVENT_STOP; // Blocca la propagazione
-            });
+            };
+
+            // when the clone is selected by the user
+            winClone.connect('button-press-event', onSuggestionPress);
+            winClone.connect('touch-event', onSuggestionPress);
+
             return winClone;
         });
 
