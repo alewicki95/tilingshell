@@ -9,6 +9,7 @@ import {
     Pango,
     GLib,
 } from '../../gi/ext';
+import TouchEventHelper from '../../utils/touch';
 
 const WINDOW_OVERLAY_FADE_TIME = 200;
 
@@ -35,6 +36,7 @@ export default class SuggestedWindowPreview extends Shell.WindowPreview {
     private _stackAbove: Clutter.Actor | null;
     private _destroyed: boolean;
     private _idleHideOverlayId: number;
+    private _touchHelper: TouchEventHelper;
 
     constructor(metaWindow: Meta.Window) {
         super({
@@ -148,6 +150,8 @@ export default class SuggestedWindowPreview extends Shell.WindowPreview {
             this._title.ensure_style();
             this._icon.ensure_style();
         });
+
+        this._touchHelper = new TouchEventHelper(this);
     }
 
     public get_window_clone(): Clutter.Actor | undefined {
@@ -344,5 +348,12 @@ export default class SuggestedWindowPreview extends Shell.WindowPreview {
         super.vfunc_key_focus_out();
 
         this.hideOverlay(true);
+    }
+
+    vfunc_touch_event(event: Clutter.Event): boolean {
+        if (this._touchHelper.convertTapToButtonPress(event))
+            return super.vfunc_touch_event(event);
+
+        return false;
     }
 }

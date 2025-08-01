@@ -12,17 +12,19 @@ import SignalHandling from '../../utils/signalHandling';
 import SuggestionsTilePreview from '../../components/windowsSuggestions/suggestionsTilePreview';
 import TilingShellWindowManager from '../../components/windowManager/tilingShellWindowManager';
 import { unmaximizeWindow } from '../../utils/gnomesupport';
+import TouchEventHelper from '../../utils/touch';
 
 const ANIMATION_SPEED = 200;
 const MASONRY_LAYOUT_ROW_HEIGHT = 0.31;
 
 export default class TilingLayoutWithSuggestions extends LayoutWidget<SuggestionsTilePreview> {
     static { registerGObjectClass(this) }
-    
+
     private _signals: SignalHandling;
     private _lastTiledWindow: Meta.Window | null;
     private _showing: boolean;
     private _oldPreviews: SuggestionsTilePreview[];
+    private _touchHelper: TouchEventHelper;
 
     constructor(
         innerGaps: Clutter.Margin,
@@ -45,6 +47,7 @@ export default class TilingLayoutWithSuggestions extends LayoutWidget<Suggestion
         this._showing = false;
         this._oldPreviews = [];
         this.connect('destroy', () => this._signals.disconnect());
+        this._touchHelper = new TouchEventHelper(this);
     }
 
     protected override buildTile(
@@ -78,7 +81,13 @@ export default class TilingLayoutWithSuggestions extends LayoutWidget<Suggestion
         this._recursivelyShowPopup(nontiledWindows, monitorIndex);
 
         this._signals.disconnect();
-        this._signals.connect(this, 'touch-event', () => this.close());
+        this._signals.connect(
+            this,
+            'touch-event',
+            (_, event: Clutter.Event) => {
+                return this._touchHelper.convertTapToButtonPress(event);
+            },
+        );
         this._signals.connect(this, 'key-focus-out', () => this.close());
         this._signals.connect(this, 'button-press-event', () => {
             // if a window clone is pressed by a button, it will stop propagating the event
@@ -248,7 +257,6 @@ export default class TilingLayoutWithSuggestions extends LayoutWidget<Suggestion
 
             // when the clone is selected by the user
             winClone.connect('button-press-event', onSuggestionPress);
-            winClone.connect('touch-event', onSuggestionPress);
 
             return winClone;
         });
