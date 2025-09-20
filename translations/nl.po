@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tiling Shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-20 13:21+0200\n"
+"POT-Creation-Date: 2025-09-20 16:40+0200\n"
 "PO-Revision-Date: 2025-04-22 22:05+0200\n"
 "Last-Translator: Mathias <https://github.com/mathiasbosman>\n"
 "Language-Team: Dutch <>\n"
@@ -633,26 +633,26 @@ msgstr "Nieuwe sneltoets…"
 msgid "Use Backspace to clear"
 msgstr "Gebruik Backspace om te wissen"
 
-#: dist/extension.js:5980
+#: dist/extension.js:5990
 msgid "Edit Layouts"
 msgstr "Bewerk indelingen"
 
-#: dist/extension.js:5990
+#: dist/extension.js:6000
 msgid "New Layout"
 msgstr "Nieuwe indeling"
 
-#: dist/extension.js:6175
+#: dist/extension.js:6185
 msgid "to split a tile"
 msgstr "om een tegel te splitsen"
 
-#: dist/extension.js:6214
+#: dist/extension.js:6224
 msgid "to split a tile vertically"
 msgstr "om een tegel verticaal te splitsen"
 
-#: dist/extension.js:6234
+#: dist/extension.js:6244
 msgid "to delete a tile"
 msgstr "om een tegel te verwijderen"
 
-#: dist/extension.js:6258
+#: dist/extension.js:6268
 msgid "use the indicator button to save or cancel"
 msgstr "gebruik de indicator-knop om op te slaan of te annuleren"

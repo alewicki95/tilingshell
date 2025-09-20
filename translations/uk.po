@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tiling Shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-20 13:21+0200\n"
+"POT-Creation-Date: 2025-09-20 16:40+0200\n"
 "PO-Revision-Date: 2025-03-17 02:23+0200\n"
 "Last-Translator: Yevhen Popok <xalt7x.service@gmail.com>\n"
 "Language-Team: Ukrainian\n"
@@ -638,27 +638,27 @@ msgstr "Нове скорочення..."
 msgid "Use Backspace to clear"
 msgstr "Використайте Backspace, щоб очистити"
 
-#: dist/extension.js:5980
+#: dist/extension.js:5990
 msgid "Edit Layouts"
 msgstr "Редагувати макет"
 
-#: dist/extension.js:5990
+#: dist/extension.js:6000
 msgid "New Layout"
 msgstr "Новий макет"
 
-#: dist/extension.js:6175
+#: dist/extension.js:6185
 msgid "to split a tile"
 msgstr "для розділення плитки"
 
-#: dist/extension.js:6214
+#: dist/extension.js:6224
 msgid "to split a tile vertically"
 msgstr "для розділення плитки вертикально"
 
-#: dist/extension.js:6234
+#: dist/extension.js:6244
 msgid "to delete a tile"
 msgstr "для вилучення плитки"
 
-#: dist/extension.js:6258
+#: dist/extension.js:6268
 msgid "use the indicator button to save or cancel"
 msgstr "використайте кнопку індикатора для збереження чи скасування"
 

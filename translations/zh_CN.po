@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tiling Shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-20 13:21+0200\n"
+"POT-Creation-Date: 2025-09-20 16:40+0200\n"
 "PO-Revision-Date: 2025-01-20 23:37+0800\n"
 "Last-Translator: lousuan <2546336381@qq.com>\n"
 "Language-Team: \n"
@@ -617,27 +617,27 @@ msgstr "设置新快捷键"
 msgid "Use Backspace to clear"
 msgstr "使用退格键（Backspace）清除"
 
-#: dist/extension.js:5980
+#: dist/extension.js:5990
 msgid "Edit Layouts"
 msgstr "编辑布局"
 
-#: dist/extension.js:5990
+#: dist/extension.js:6000
 msgid "New Layout"
 msgstr "新建布局"
 
-#: dist/extension.js:6175
+#: dist/extension.js:6185
 msgid "to split a tile"
 msgstr "水平分割一个平铺位置"
 
-#: dist/extension.js:6214
+#: dist/extension.js:6224
 msgid "to split a tile vertically"
 msgstr "垂直分割一个平铺位置"
 
-#: dist/extension.js:6234
+#: dist/extension.js:6244
 msgid "to delete a tile"
 msgstr "删除一个平铺位置"
 
-#: dist/extension.js:6258
+#: dist/extension.js:6268
 msgid "use the indicator button to save or cancel"
 msgstr "使用托盘图标来保存或取消"
 

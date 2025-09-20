@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-20 13:21+0200\n"
+"POT-Creation-Date: 2025-09-20 16:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -608,26 +608,26 @@ msgstr ""
 msgid "Use Backspace to clear"
 msgstr ""
 
-#: dist/extension.js:5980
+#: dist/extension.js:5990
 msgid "Edit Layouts"
 msgstr ""
 
-#: dist/extension.js:5990
+#: dist/extension.js:6000
 msgid "New Layout"
 msgstr ""
 
-#: dist/extension.js:6175
+#: dist/extension.js:6185
 msgid "to split a tile"
 msgstr ""
 
-#: dist/extension.js:6214
+#: dist/extension.js:6224
 msgid "to split a tile vertically"
 msgstr ""
 
-#: dist/extension.js:6234
+#: dist/extension.js:6244
 msgid "to delete a tile"
 msgstr ""
 
-#: dist/extension.js:6258
+#: dist/extension.js:6268
 msgid "use the indicator button to save or cancel"
 msgstr ""

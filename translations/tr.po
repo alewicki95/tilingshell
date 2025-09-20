@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-20 13:21+0200\n"
+"POT-Creation-Date: 2025-09-20 16:40+0200\n"
 "PO-Revision-Date: 2025-05-09 10:05+0300\n"
 "Last-Translator: Osman KARAGÖZ <osmank3@gmail.com>\n"
 "Language-Team: \n"
@@ -631,26 +631,26 @@ msgstr "Yeni kısayol…"
 msgid "Use Backspace to clear"
 msgstr "Temizlemek için Backspace kullan"
 
-#: dist/extension.js:5980
+#: dist/extension.js:5990
 msgid "Edit Layouts"
 msgstr "Yerleşimleri Düzenle"
 
-#: dist/extension.js:5990
+#: dist/extension.js:6000
 msgid "New Layout"
 msgstr "Yeni Yerleşim"
 
-#: dist/extension.js:6175
+#: dist/extension.js:6185
 msgid "to split a tile"
 msgstr "bir döşemeyi bölmek için"
 
-#: dist/extension.js:6214
+#: dist/extension.js:6224
 msgid "to split a tile vertically"
 msgstr "bir döşemeyi dikey olarak bölmek için"
 
-#: dist/extension.js:6234
+#: dist/extension.js:6244
 msgid "to delete a tile"
 msgstr "bir döşemeyi silmek için"
 
-#: dist/extension.js:6258
+#: dist/extension.js:6268
 msgid "use the indicator button to save or cancel"
 msgstr "kaydetmek veya vazgeçmek için gösterge düğmesini kullanın"

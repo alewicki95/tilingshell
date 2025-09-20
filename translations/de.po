@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tiling Shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-20 13:21+0200\n"
+"POT-Creation-Date: 2025-09-20 16:40+0200\n"
 "PO-Revision-Date: 2025-03-30 22:18+0200\n"
 "Last-Translator: Christoph Haas <christoph.h44z@gmail.com>\n"
 "Language-Team: German\n"
@@ -643,26 +643,26 @@ msgstr "Neues Tastenkürzel…"
 msgid "Use Backspace to clear"
 msgstr "Backspace zum Löschen verwenden"
 
-#: dist/extension.js:5980
+#: dist/extension.js:5990
 msgid "Edit Layouts"
 msgstr "Layouts bearbeiten"
 
-#: dist/extension.js:5990
+#: dist/extension.js:6000
 msgid "New Layout"
 msgstr "Neues Layout"
 
-#: dist/extension.js:6175
+#: dist/extension.js:6185
 msgid "to split a tile"
 msgstr "um eine Kachel zu teilen"
 
-#: dist/extension.js:6214
+#: dist/extension.js:6224
 msgid "to split a tile vertically"
 msgstr "um eine Kachel vertikal zu teilen"
 
-#: dist/extension.js:6234
+#: dist/extension.js:6244
 msgid "to delete a tile"
 msgstr "um eine Kachel zu löschen"
 
-#: dist/extension.js:6258
+#: dist/extension.js:6268
 msgid "use the indicator button to save or cancel"
 msgstr "Verwenden Sie die Indikator-Schaltfläche zum Speichern oder Abbrechen"

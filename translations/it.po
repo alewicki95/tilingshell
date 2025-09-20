@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tiling Shell\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-22 22:05+0200\n"
+"POT-Creation-Date: 2025-09-20 16:40+0200\n"
 "PO-Revision-Date: 2025-09-14 12:39+0200\n"
 "Last-Translator: Albano Battistella <albanobattistella@gmail.com>\n"
 "Language-Team: Italian <>\n"
@@ -263,7 +263,8 @@ msgstr "Trascina le finestre contro il bordo superiore per massimizzarle"
 msgid "Quarter tiling activation area"
 msgstr "Area di attivazione della divisione in quarti"
 
-#: dist/prefs.js:997
+#: dist/prefs.js:1027
+#, javascript-format
 msgid "Activation area to trigger quarter tiling (%% of the screen)"
 msgstr ""
 "Area di attivazione per attivare la divisione in quarti (%% dello schermo)"
@@ -518,13 +519,14 @@ msgstr "Seleziona finestra precedente"
 msgid "Focus the window prior to the current focused window"
 msgstr "Seleziona la finestra precedente alla finestra attualmente selezionata"
 
-#: dist/prefs.js:1332
+#: dist/prefs.js:1379
 msgid "Highlight focused window"
 msgstr "Evidenzia la finestra focalizzata"
 
-#: dist/prefs.js:1334
+#: dist/prefs.js:1381
 msgid "Minimize all the other windows and show only the focused window"
-msgstr "Riduci a icona tutte le altre finestre e mostra solo la finestra focalizzata"
+msgstr ""
+"Riduci a icona tutte le altre finestre e mostra solo la finestra focalizzata"
 
 #: dist/prefs.js:1388
 #, fuzzy
@@ -633,27 +635,27 @@ msgstr "Nuova scorciatoia"
 msgid "Use Backspace to clear"
 msgstr "Usa Backspace per eliminare"
 
-#: dist/extension.js:5980
+#: dist/extension.js:5990
 msgid "Edit Layouts"
 msgstr "Modifica layout"
 
-#: dist/extension.js:5990
+#: dist/extension.js:6000
 msgid "New Layout"
 msgstr "Nuovo layout"
 
-#: dist/extension.js:6175
+#: dist/extension.js:6185
 msgid "to split a tile"
 msgstr "per dividere un riquadro"
 
-#: dist/extension.js:6214
+#: dist/extension.js:6224
 msgid "to split a tile vertically"
 msgstr "per dividere un riquadro verticalmente"
 
-#: dist/extension.js:6234
+#: dist/extension.js:6244
 msgid "to delete a tile"
 msgstr "per cancellare un riquadro"
 
-#: dist/extension.js:6258
+#: dist/extension.js:6268
 msgid "use the indicator button to save or cancel"
 msgstr "usa l'icona sul pannello superiore per salvare o annullare"
 
