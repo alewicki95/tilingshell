@@ -223,8 +223,6 @@ export default class Indicator extends PanelMenu.Button {
                 break;
             case IndicatorState.CREATE_NEW:
             case IndicatorState.EDITING_LAYOUT:
-                this._currentMenu = new EditingMenu(this);
-                this.show();
                 if (this._keyPressEvent)
                     global.stage.disconnect(this._keyPressEvent);
                 this._keyPressEvent = global.stage.connect_after(
@@ -237,6 +235,8 @@ export default class Indicator extends PanelMenu.Button {
                         return Clutter.EVENT_PROPAGATE;
                     },
                 );
+                this._currentMenu = new EditingMenu(this);
+                this.show();
                 break;
         }
     }
