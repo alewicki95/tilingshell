@@ -37,9 +37,9 @@ export function getEventCoords(event: any): number[] {
 }
 
 export function maximizeWindow(window: Meta.Window): void {
-    window.maximize(Meta.MaximizeFlags.BOTH);
+    window.get_maximized ? window.maximize(Meta.MaximizeFlags.BOTH):window.maximize();
 }
 
 export function unmaximizeWindow(window: Meta.Window): void {
-    window.unmaximize(Meta.MaximizeFlags.BOTH);
+    window.get_maximized ? window.unmaximize(Meta.MaximizeFlags.BOTH):window.unmaximize();
 }
