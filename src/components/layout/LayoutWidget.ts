@@ -1,15 +1,15 @@
-import { St, Clutter, Mtk } from '@gi.ext';
+import { St, Clutter, Mtk } from '../../gi/ext';
 import TilePreview from '../tilepreview/tilePreview';
 import {
     buildRectangle,
     buildTileGaps,
     enableScalingFactorSupport,
-} from '@/utils/ui';
-import { logger } from '@utils/logger';
+} from '../../utils/ui';
+import { logger } from '../../utils/logger';
 import Layout from './Layout';
 import Tile from './Tile';
 import TileUtils from './TileUtils';
-import { registerGObjectClass } from '@utils/gjs';
+import { registerGObjectClass } from '../../utils/gjs';
 
 const debug = logger('LayoutWidget');
 

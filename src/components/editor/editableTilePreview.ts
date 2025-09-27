@@ -1,10 +1,10 @@
 import TilePreview from '../tilepreview/tilePreview';
-import { GObject, St, Clutter, Mtk } from '@gi.ext';
+import { GObject, St, Clutter, Mtk } from '../../gi/ext';
 import Tile from '../layout/Tile';
 import Slider from './slider';
 import TileUtils from '../layout/TileUtils';
-import { registerGObjectClass } from '@utils/gjs';
-import { buildTileGaps } from '@utils/ui';
+import { registerGObjectClass } from '../../utils/gjs';
+import { buildTileGaps } from '../../utils/ui';
 
 @registerGObjectClass
 export default class EditableTilePreview extends TilePreview {

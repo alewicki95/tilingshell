@@ -1,10 +1,10 @@
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
-import { GObject, Meta, Gio, Shell, GLib, Clutter } from '@gi.ext';
-import Settings from '@settings/settings';
-import SettingsOverride from '@settings/settingsOverride';
-import SignalHandling from '@utils/signalHandling';
-import { registerGObjectClass } from '@utils/gjs';
-import { logger } from '@utils/logger';
+import { GObject, Meta, Gio, Shell, GLib, Clutter } from './gi/ext';
+import Settings from './settings/settings';
+import SettingsOverride from './settings/settingsOverride';
+import SignalHandling from './utils/signalHandling';
+import { registerGObjectClass } from './utils/gjs';
+import { logger } from './utils/logger';
 
 const debug = logger('KeyBindings');
 

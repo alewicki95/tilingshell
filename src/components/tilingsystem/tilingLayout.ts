@@ -1,8 +1,7 @@
-import { registerGObjectClass } from '@/utils/gjs';
-import { Clutter, Mtk, Meta } from '@gi.ext';
-import TilePreview, {
-    TilePreviewConstructorProperties,
-} from '../tilepreview/tilePreview';
+import { registerGObjectClass } from '../../utils/gjs';
+import { Clutter, Mtk, Meta } from '../../gi/ext';
+import { TilePreviewConstructorProperties } from '../tilepreview/tilePreview';
+import TilePreview from '../tilepreview/tilePreview';
 import LayoutWidget from '../layout/LayoutWidget';
 import Layout from '../layout/Layout';
 import Tile from '../layout/Tile';
@@ -11,11 +10,11 @@ import {
     buildTileGaps,
     isPointInsideRect,
     squaredEuclideanDistance,
-} from '@utils/ui';
-import TileUtils from '@components/layout/TileUtils';
-import { logger } from '@utils/logger';
-import GlobalState from '@utils/globalState';
-import { KeyBindingsDirection } from '@keybindings';
+} from '../../utils/ui';
+import TileUtils from '../../components/layout/TileUtils';
+import { logger } from '../../utils/logger';
+import GlobalState from '../../utils/globalState';
+import { KeyBindingsDirection } from '../../keybindings';
 
 const debug = logger('TilingLayout');
 

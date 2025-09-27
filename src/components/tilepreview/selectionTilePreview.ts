@@ -1,10 +1,10 @@
-import { registerGObjectClass } from '@/utils/gjs';
-import { GObject, St, Clutter, Gio, Mtk } from '@gi.ext';
+import { registerGObjectClass } from '../../utils/gjs';
+import { GObject, St, Clutter, Gio, Mtk } from '../../gi/ext';
 import TilePreview from './tilePreview';
-import Settings from '@settings/settings';
-import { buildBlurEffect } from '@utils/gnomesupport';
-import Tile from '@components/layout/Tile';
-import { logger } from '@utils/logger';
+import Settings from '../../settings/settings';
+import { buildBlurEffect } from '../../utils/gnomesupport';
+import Tile from '../../components/layout/Tile';
+import { logger } from '../../utils/logger';
 
 const debug = logger('SelectionTilePreview');
 

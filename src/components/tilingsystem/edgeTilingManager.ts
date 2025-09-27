@@ -2,11 +2,11 @@ import {
     buildRectangle,
     isPointInsideRect,
     clampPointInsideRect,
-} from '@utils/ui';
-import { GObject, Mtk, St } from '@gi.ext';
-import Settings from '@settings/settings';
-import { registerGObjectClass } from '@utils/gjs';
-import { logger } from '@utils/logger';
+} from '../../utils/ui';
+import { GObject, Mtk, St } from '../../gi/ext';
+import Settings from '../../settings/settings';
+import { registerGObjectClass } from '../../utils/gjs';
+import { logger } from '../../utils/logger';
 
 const TOP_EDGE_TILING_OFFSET = 8;
 const QUARTER_PERCENTAGE = 0.5;
@@ -149,9 +149,13 @@ export default class EdgeTilingManager extends GObject.Object {
             pointerPos.x <= this._workArea.x + this._edgeTilingOffset ||
             pointerPos.y <= this._workArea.y + TOP_EDGE_TILING_OFFSET ||
             pointerPos.x >=
-                this._workArea.x + this._workArea.width - this._edgeTilingOffset ||
+                this._workArea.x +
+                    this._workArea.width -
+                    this._edgeTilingOffset ||
             pointerPos.y >=
-                this._workArea.y + this._workArea.height - this._edgeTilingOffset
+                this._workArea.y +
+                    this._workArea.height -
+                    this._edgeTilingOffset
         );
     }
 

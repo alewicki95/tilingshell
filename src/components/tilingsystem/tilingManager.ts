@@ -1,6 +1,6 @@
-import { Clutter, Mtk, Meta, GLib } from '@gi.ext';
+import { Clutter, Mtk, Meta, GLib } from '../../gi/ext';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
-import { logger } from '@utils/logger';
+import { logger } from '../../utils/logger';
 import {
     buildMargin,
     buildRectangle,
@@ -11,24 +11,25 @@ import {
     isPointInsideRect,
     isTileOnContainerBorder,
     squaredEuclideanDistance,
-} from '@/utils/ui';
-import TilingLayout from '@/components/tilingsystem/tilingLayout';
+} from '../..//utils/ui';
+import TilingLayout from '../..//components/tilingsystem/tilingLayout';
 import SnapAssist from '../snapassist/snapAssist';
 import SelectionTilePreview from '../tilepreview/selectionTilePreview';
-import Settings, { ActivationKey } from '@settings/settings';
-import SignalHandling from '@utils/signalHandling';
+import { ActivationKey } from '../../settings/settings';
+import Settings from '../../settings/settings';
+import SignalHandling from '../../utils/signalHandling';
 import Layout from '../layout/Layout';
 import Tile from '../layout/Tile';
 import TileUtils from '../layout/TileUtils';
-import GlobalState from '@utils/globalState';
+import GlobalState from '../../utils/globalState';
 import { Monitor } from 'resource:///org/gnome/shell/ui/layout.js';
 import ExtendedWindow from './extendedWindow';
 import EdgeTilingManager from './edgeTilingManager';
 import TouchPointer from './touchPointer';
-import { KeyBindingsDirection } from '@keybindings';
-import TilingShellWindowManager from '@components/windowManager/tilingShellWindowManager';
+import { KeyBindingsDirection } from '../../keybindings';
+import TilingShellWindowManager from '../../components/windowManager/tilingShellWindowManager';
 import TilingLayoutWithSuggestions from '../windowsSuggestions/tilingLayoutWithSuggestions';
-import { maximizeWindow, unmaximizeWindow } from '@utils/gnomesupport';
+import { maximizeWindow, unmaximizeWindow } from '../../utils/gnomesupport';
 
 const MINIMUM_DISTANCE_TO_RESTORE_ORIGINAL_SIZE = 90;
 

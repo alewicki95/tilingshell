@@ -1,12 +1,12 @@
-import { registerGObjectClass } from '@utils/gjs';
+import { registerGObjectClass } from '../utils/gjs';
 import Layout from '../components/layout/Layout';
 import Settings from '../settings/settings';
 import SignalHandling from './signalHandling';
-import { GObject, Meta, Gio } from '@gi.ext';
+import { GObject, Meta, Gio } from '../gi/ext';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import { logger } from './logger';
 import { getWindows } from './ui';
-import ExtendedWindow from '@components/tilingsystem/extendedWindow';
+import ExtendedWindow from '../components/tilingsystem/extendedWindow';
 
 const debug = logger('GlobalState');
 

@@ -1,10 +1,10 @@
-import { Clutter } from '@gi.ext';
-import { registerGObjectClass } from '@/utils/gjs';
-import { buildRectangle } from '@utils/ui';
-import Tile from '@components/layout/Tile';
+import { Clutter } from '../../gi/ext';
+import { registerGObjectClass } from '../..//utils/gjs';
+import { buildRectangle } from '../../utils/ui';
+import Tile from '../../components/layout/Tile';
 import TilePreview, {
     TilePreviewConstructorProperties,
-} from '@components/tilepreview/tilePreview';
+} from '../../components/tilepreview/tilePreview';
 
 @registerGObjectClass
 export default class TilePreviewWithWindow extends TilePreview {

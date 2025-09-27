@@ -1,4 +1,4 @@
-import { registerGObjectClass } from '@utils/gjs';
+import { registerGObjectClass } from '../../utils/gjs';
 import {
     GObject,
     Clutter,
@@ -9,8 +9,8 @@ import {
     Atk,
     Pango,
     GLib,
-} from '@gi.ext';
-import { logger } from '@utils/logger';
+} from '../../gi/ext';
+import { logger } from '../../utils/logger';
 
 const WINDOW_OVERLAY_FADE_TIME = 200;
 

@@ -1,5 +1,5 @@
-import { GObject, St, Clutter, Gio } from '@gi.ext';
-import SignalHandling from '@utils/signalHandling';
+import { GObject, St, Clutter, Gio } from '../gi/ext';
+import SignalHandling from '../utils/signalHandling';
 import Indicator from './indicator';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {
@@ -7,20 +7,20 @@ import {
     getMonitors,
     getMonitorScalingFactor,
     getScalingFactorOf,
-} from '@/utils/ui';
-import Settings from '@settings/settings';
-import * as IndicatorUtils from './utils';
-import GlobalState from '@utils/globalState';
+} from '../utils/ui';
+import Settings from '../settings/settings';
+import GlobalState from '../utils/globalState';
 import CurrentMenu from './currentMenu';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import LayoutButton from './layoutButton';
-import { logger } from '@utils/logger';
-import { registerGObjectClass } from '@utils/gjs';
+import { logger } from '../utils/logger';
+import { registerGObjectClass } from '../utils/gjs';
 import { Monitor } from 'resource:///org/gnome/shell/ui/layout.js';
-import Layout from '@components/layout/Layout';
+import Layout from '../components/layout/Layout';
 import { _ } from '../translations';
-import { openPrefs } from '@polyfill';
-import { widgetOrientation } from '@utils/gnomesupport';
+import { openPrefs } from '../polyfill';
+import { widgetOrientation } from '../utils/gnomesupport';
+import { createButton, createIconButton } from './utils';
 
 const debug = logger('DefaultMenu');
 
@@ -307,7 +307,7 @@ export default class DefaultMenu implements CurrentMenu {
             styleClass: 'buttons-box-layout',
         });
 
-        const editLayoutsBtn = IndicatorUtils.createButton(
+        const editLayoutsBtn = createButton(
             'edit-symbolic',
             `${_('Edit Layouts')}...`,
             this._indicator.path,
@@ -316,7 +316,7 @@ export default class DefaultMenu implements CurrentMenu {
             this._indicator.openLayoutEditor(),
         );
         buttonsBoxLayout.add_child(editLayoutsBtn);
-        const newLayoutBtn = IndicatorUtils.createButton(
+        const newLayoutBtn = createButton(
             'add-symbolic',
             `${_('New Layout')}...`,
             this._indicator.path,
@@ -326,7 +326,7 @@ export default class DefaultMenu implements CurrentMenu {
         );
         buttonsBoxLayout.add_child(newLayoutBtn);
 
-        const prefsBtn = IndicatorUtils.createIconButton(
+        const prefsBtn = createIconButton(
             'prefs-symbolic',
             this._indicator.path,
         );

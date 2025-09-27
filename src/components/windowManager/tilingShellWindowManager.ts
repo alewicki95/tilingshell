@@ -1,7 +1,7 @@
-import { registerGObjectClass } from '@utils/gjs';
-import { logger } from '@utils/logger';
-import SignalHandling from '@utils/signalHandling';
-import { GObject, Meta, Mtk, Clutter, Graphene } from '@gi.ext';
+import { registerGObjectClass } from '../../utils/gjs';
+import { logger } from '../../utils/logger';
+import SignalHandling from '../../utils/signalHandling';
+import { GObject, Meta, Mtk, Clutter, Graphene } from '../../gi/ext';
 
 const debug = logger('TilingShellWindowManager');
 

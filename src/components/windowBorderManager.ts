@@ -1,16 +1,15 @@
-import { GObject, Meta, St, Clutter, Shell, Gio, GLib } from '@gi.ext';
-import SignalHandling from '@utils/signalHandling';
-import { logger } from '@utils/logger';
-import { registerGObjectClass } from '@utils/gjs';
-import Settings from '@settings/settings';
-import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import { GObject, Meta, St, Clutter, Shell, Gio, GLib } from '../gi/ext';
+import SignalHandling from '../utils/signalHandling';
+import { logger } from '../utils/logger';
+import { registerGObjectClass } from '../utils/gjs';
+import Settings from '../settings/settings';
 import {
     buildRectangle,
     enableScalingFactorSupport,
     getMonitorScalingFactor,
     getScalingFactorOf,
     getScalingFactorSupportString,
-} from '@utils/ui';
+} from '../utils/ui';
 
 Gio._promisify(Shell.Screenshot, 'composite_to_stream');
 

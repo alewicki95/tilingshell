@@ -1,10 +1,10 @@
-import { registerGObjectClass } from '@utils/gjs';
-import { Clutter, Mtk, Meta, St } from '@gi.ext';
-import LayoutWidget from '@components/layout/LayoutWidget';
-import Tile from '@components/layout/Tile';
-import Layout from '@components/layout/Layout';
-import { buildMarginOf, buildRectangle } from '@utils/ui';
-import { logger } from '@utils/logger';
+import { registerGObjectClass } from '../../utils/gjs';
+import { Clutter, Mtk, Meta, St } from '../../gi/ext';
+import LayoutWidget from '../../components/layout/LayoutWidget';
+import Tile from '../../components/layout/Tile';
+import Layout from '../../components/layout/Layout';
+import { buildMarginOf, buildRectangle } from '../../utils/ui';
+import { logger } from '../../utils/logger';
 import TilePreviewWithWindow from './tilePreviewWithWindow';
 import MetaWindowGroup from './MetaWindowGroup';
 import { _ } from '../../translations';

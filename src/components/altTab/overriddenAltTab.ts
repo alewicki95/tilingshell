@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as AltTab from 'resource:///org/gnome/shell/ui/altTab.js';
-import { St, Meta, Clutter } from '@gi.ext';
-import { logger } from '@utils/logger';
-import ExtendedWindow from '@components/tilingsystem/extendedWindow';
+import { St, Meta, Clutter } from '../../gi/ext';
+import { logger } from '../../utils/logger';
+import ExtendedWindow from '../../components/tilingsystem/extendedWindow';
 import MultipleWindowsIcon from './MultipleWindowsIcon';
-import { buildMargin, getWindows } from '@utils/ui';
-import Settings from '@settings/settings';
+import { buildMargin, getWindows } from '../../utils/ui';
+import Settings from '../../settings/settings';
 
 const GAPS = 3;
 

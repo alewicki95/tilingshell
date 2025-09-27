@@ -1,10 +1,10 @@
-import { registerGObjectClass } from '@/utils/gjs';
-import { Clutter, Mtk, St } from '@gi.ext';
+import { registerGObjectClass } from '../../utils/gjs';
+import { Clutter, Mtk, St } from '../../gi/ext';
 import LayoutWidget from '../layout/LayoutWidget';
 import Tile from '../layout/Tile';
 import SnapAssistTile from './snapAssistTile';
-import Layout from '@components/layout/Layout';
-import { buildRectangle } from '@utils/ui';
+import Layout from '../../components/layout/Layout';
+import { buildRectangle } from '../../utils/ui';
 
 @registerGObjectClass
 export default class SnapAssistLayout extends LayoutWidget<SnapAssistTile> {

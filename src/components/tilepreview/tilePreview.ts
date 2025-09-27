@@ -1,9 +1,9 @@
-import { St, Clutter, Mtk, Meta } from '@gi.ext';
-import { registerGObjectClass } from '@/utils/gjs';
-import { buildRectangle, getScalingFactorOf } from '@utils/ui';
-import GlobalState from '@utils/globalState';
-import Tile from '@components/layout/Tile';
-import { logger } from '@utils/logger';
+import { St, Clutter, Mtk, Meta } from '../../gi/ext';
+import { registerGObjectClass } from '../../utils/gjs';
+import { buildRectangle, getScalingFactorOf } from '../../utils/ui';
+import GlobalState from '../../utils/globalState';
+import Tile from '../../components/layout/Tile';
+import { logger } from '../../utils/logger';
 
 const debug = logger('TilePreview');
 

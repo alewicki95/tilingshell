@@ -1,18 +1,18 @@
-import { registerGObjectClass } from '@/utils/gjs';
-import { Clutter, Mtk, Meta, St } from '@gi.ext';
+import { registerGObjectClass } from '../../utils/gjs';
+import { Clutter, Mtk, Meta, St } from '../../gi/ext';
 import Layout from '../layout/Layout';
-import { buildRectangle } from '@utils/ui';
+import { buildRectangle } from '../../utils/ui';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
-import { logger } from '@utils/logger';
-import GlobalState from '@utils/globalState';
+import { logger } from '../../utils/logger';
+import GlobalState from '../../utils/globalState';
 import ExtendedWindow from '../tilingsystem/extendedWindow';
 import SuggestedWindowPreview from './suggestedWindowPreview';
-import Tile from '@components/layout/Tile';
-import LayoutWidget from '@components/layout/LayoutWidget';
-import SignalHandling from '@utils/signalHandling';
-import SuggestionsTilePreview from '@components/windowsSuggestions/suggestionsTilePreview';
-import TilingShellWindowManager from '@components/windowManager/tilingShellWindowManager';
-import { unmaximizeWindow } from '@utils/gnomesupport';
+import Tile from '../../components/layout/Tile';
+import LayoutWidget from '../../components/layout/LayoutWidget';
+import SignalHandling from '../../utils/signalHandling';
+import SuggestionsTilePreview from '../../components/windowsSuggestions/suggestionsTilePreview';
+import TilingShellWindowManager from '../../components/windowManager/tilingShellWindowManager';
+import { unmaximizeWindow } from '../../utils/gnomesupport';
 
 const debug = logger('TilingLayoutWithSuggestions');
 

@@ -1,9 +1,9 @@
-import { registerGObjectClass } from '@/utils/gjs';
+import { registerGObjectClass } from '../../utils/gjs';
 import TilePreview from '../tilepreview/tilePreview';
 import Tile from '../layout/Tile';
-import { St, Clutter, Mtk } from '@gi.ext';
-import { getScalingFactorOf } from '@utils/ui';
-import { logger } from '@utils/logger';
+import { St, Clutter, Mtk } from '../../gi/ext';
+import { getScalingFactorOf } from '../../utils/ui';
+import { logger } from '../../utils/logger';
 
 const debug = logger('SnapAssistTile');
 

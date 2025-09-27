@@ -1,5 +1,5 @@
-import { registerGObjectClass } from '@/utils/gjs';
-import { Shell } from '@gi.ext';
+import { registerGObjectClass } from '../../utils/gjs';
+import { Shell } from '../../gi/ext';
 import TilePreview from './tilePreview';
 
 @registerGObjectClass

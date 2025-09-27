@@ -2,22 +2,22 @@
 import * as windowMenu from 'resource:///org/gnome/shell/ui/windowMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
-import { GObject, St, Clutter, Meta } from '@gi.ext';
-import GlobalState from '@utils/globalState';
-import { registerGObjectClass } from '@utils/gjs';
-import Tile from '@components/layout/Tile';
+import { GObject, St, Clutter, Meta } from '../../gi/ext';
+import GlobalState from '../../utils/globalState';
+import { registerGObjectClass } from '../../utils/gjs';
+import Tile from '../../components/layout/Tile';
 import {
     enableScalingFactorSupport,
     getMonitorScalingFactor,
     getWindows,
-} from '@utils/ui';
-import ExtendedWindow from '@components/tilingsystem/extendedWindow';
-import TileUtils from '@components/layout/TileUtils';
+} from '../../utils/ui';
+import ExtendedWindow from '../../components/tilingsystem/extendedWindow';
+import TileUtils from '../../components/layout/TileUtils';
 import LayoutTileButtons from './layoutTileButtons';
-import { buildMarginOf } from '@utils/ui';
+import { buildMarginOf } from '../../utils/ui';
 import LayoutIcon from './layoutIcon';
 import { _ } from '../../translations';
-import { widgetOrientation } from '@utils/gnomesupport';
+import { widgetOrientation } from '../../utils/gnomesupport';
 
 const LAYOUT_ICON_WIDTH = 46;
 const LAYOUT_ICON_HEIGHT = 32;

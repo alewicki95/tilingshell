@@ -1,8 +1,8 @@
-import { registerGObjectClass } from '@/utils/gjs';
-import { GObject, St, Clutter, Mtk } from '@gi.ext';
+import { registerGObjectClass } from '../../utils/gjs';
+import { GObject, St, Clutter, Mtk } from '../../gi/ext';
 import TilePreview from '../tilepreview/tilePreview';
-import { buildBlurEffect, widgetOrientation } from '@utils/gnomesupport';
-import Tile from '@components/layout/Tile';
+import { buildBlurEffect, widgetOrientation } from '../../utils/gnomesupport';
+import Tile from '../../components/layout/Tile';
 import MasonryLayoutManager from './masonryLayoutManager';
 
 const MASONRY_LAYOUT_SPACING = 32;

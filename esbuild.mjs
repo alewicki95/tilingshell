@@ -1,15 +1,35 @@
 import { build } from 'esbuild';
 import { sassPlugin } from 'esbuild-sass-plugin'
-import fs from 'fs';
+import fs from 'fs/promises';
+import fsSync from 'fs';
 import path from 'path';
 import { glob } from 'glob';
+import parser from '@babel/parser';
+import types from '@babel/types';
+import traverseBabel from '@babel/traverse';
+import generatorBabel from '@babel/generator';
+
+const traverse = traverseBabel.default;
+const generator = generatorBabel.default;
 
 const resourcesDir = "resources";
 const distDir = "dist";
 const distLegacyDir = "dist_legacy";
 
-const extensionBanner = `// For GNOME Shell version before 45
-class Extension {
+const globalBanner = `// For GNOME Shell version before 45
+const Me = imports.misc.extensionUtils.getCurrentExtension();
+`;
+
+const mtkDefinition = `// For GNOME Shell version before 45
+var Mtk = class { Rectangle }
+Mtk.Rectangle = function (params = {}) {
+    return new imports.gi.Meta.Rectangle(params);
+};
+Mtk.Rectangle.$gtype = imports.gi.Meta.Rectangle.$gtype;
+`;
+
+const polyfillBanner = `// For GNOME Shell version before 45
+var Extension = class {
     constructor(meta) { // meta has type ExtensionMeta
       this.metadata = meta.metadata;
       this.uuid = meta.uuid;
@@ -23,12 +43,6 @@ class Extension {
         return imports.misc.extensionUtils.openPrefs();
     }
 }
-
-class Mtk { Rectangle }
-Mtk.Rectangle = function (params = {}) {
-    return new imports.gi.Meta.Rectangle(params);
-};
-Mtk.Rectangle.$gtype = imports.gi.Meta.Rectangle.$gtype;
 `;
 
 const extensionFooter = `
@@ -68,48 +82,143 @@ function preprocess(text) {
     return text;
 }
 
-/// Converts imports on the form
-/// import { a, b, c } from 'gi://Source'
-///
-/// to
-///
-/// const Source = imports.gi;
-/// and
-/// const { a, b, c } = imports.gi.Source;
-/// If the imported module is Mtk, it is aliased with Meta
-function convertImports(text) {
-    // drop import of Extension class
-    text = text.replaceAll('import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";', "");
+/**
+ * Transforms modern ES module imports/exports into the legacy format
+ * required by GNOME Shell extensions.
+ *
+ * ### What it does
+ * 1. Converts `import` statements such as:
+ *    ```js
+ *    import { a, b, c } from "gi://Source";
+ *    ```
+ *    into:
+ *    ```js
+ *    const Source = imports.gi.Source;
+ *    const { a, b, c } = imports.gi.Source;
+ *    ```
+ *
+ * 2. Handles `resource:///` imports:
+ *    ```js
+ *    import * as Foo from "resource:///org/gnome/shell/misc/foo.js";
+ *    ```
+ *    → `const Foo = imports.misc.foo;`
+ *
+ * 3. Resolves relative imports to `Me.imports.<path>`:
+ *    ```js
+ *    import Bar from "./utils/bar.js";
+ *    ```
+ *    → `const Bar = Me.imports.utils.bar.Bar;`
+ *
+ * 4. Removes specific unused GNOME imports:
+ *    - `extension.js`
+ *    - `prefs.js`
+ *    - `config.js`
+ *
+ * 5. Converts top-level `const` and `let` declarations to `var` for
+ *    compatibility with the GNOME Shell JS engine.
+ *
+ * 6. Converts top-level `class` declarations to:
+ *    ```js
+ *    var MyClass = class extends BaseClass { ... };
+ *    ```
+ *
+ * 7. Drops ES `export` statements, since GNOME Shell expects no exports.
+ *
+ * 8. Special-cases the `Mtk` import: replaces
+ *    ```js
+ *    var Mtk = imports.gi.Mtk;
+ *    ```
+ *    with a custom object that aliases `Mtk.Rectangle` to `Meta.Rectangle`.
+ *
+ * @param {string} text – The source code to transform.
+ * @param {string} currentFilePath – Absolute path of the file being processed.
+ * @param {string} rootDirName – Absolute path to the project’s root directory.
+ * @returns {string} – The transformed, GNOME-compatible code.
+ */
+function convertImports(text, currentFilePath, rootDirName) {
+    const dropImports = [
+        "resource:///org/gnome/shell/extensions/extension.js",
+        "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js",
+        "resource:///org/gnome/Shell/Extensions/js/misc/config.js"
+    ];
 
-    // drop import of ExtensionPreferences class
-    text = text.replaceAll('import { ExtensionPreferences } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";', "");
+    text = text
+        // translation import → const { gettext: _, ngettext, pgettext }
+        .replace(
+            /import\s*\{[^}]*gettext\s+as\s+_[^}]*\}[^;]*;/gm,
+            "const { gettext: _, ngettext, pgettext } = imports.misc.extensionUtils;"
+        )
+        // generic gi:// import → const X = imports.gi.X
+        .replace(
+            /import\s+(.+)\s+from\s+"gi:\/\/(.+)";/gm,
+            (_, imported, module) => `const ${imported} = imports.gi.${module}`
+        )
+        // resource import → const X = imports.path.to.X
+        .replace(
+            /import\s+\*\s+as\s+(.+)\s+from\s+"resource:\/\/\/org\/gnome\/shell\/(.+)\.js";/gm,
+            (_, imported, module) => `const ${imported} = imports.${module.replace(/\//g, '.')}`
+        );
 
     // replace import of Config
     text = text.replaceAll('import * as Config from "resource:///org/gnome/Shell/Extensions/js/misc/config.js";', "const Config = imports.misc.config;");
 
-    // replace import of translation related code
-    const regexTranslation = new RegExp(`import {(.*|\n.*)?gettext as _[^from]*[^;]*;`, 'gm');
-    text = text.replaceAll(regexTranslation, "const { gettext: _, ngettext, pgettext } = imports.misc.extensionUtils;");
+    // handle relative imports
+    const relativeCurrent = currentFilePath.replace(
+        new RegExp(`^${rootDirName}[\\\\/]`), ''
+    );
 
-    const regexExportExtension = new RegExp(`export {((.|\n)*)(.+) as default((.|\n)*)};`, 'gm');
-    text = text.replaceAll(regexExportExtension, "");
+    text = text.replace(
+        /import\s+(?:\{([\s\S]+?)\}|([^\s]+))\s+from\s+"([\.]{1,2}\/[^"]+)";/gm,
+        (_, destructured, single, importPath) => {
+            const currentAbs = path.resolve(rootDirName, relativeCurrent);
+            const fullPath = path.resolve(path.dirname(currentAbs), importPath).replace(/\.(js|ts)$/, '');
+            const relativeModule = path.relative(rootDirName, fullPath).replace(/\\/g, '/').split('/').join('.');
 
-    // replace import Source from "gi://Source" with const Source = imports.gi.Source;
-    const regexGi = new RegExp('import (.+) from \\"gi:\\/\\/(.+)\\"', 'gm');
-    text = text.replaceAll(regexGi, (match, imported, module) => {
-        if (module.indexOf("Mtk") >= 0) {
-            // remove first occurrence of Mtk.
-            // it will be defined by the extension banner
-            if (imported === "Mtk") return "";
-            // alias the imported Mtk with the extension banner's Mtk
-            return `const ${imported} = Mtk`;
+            if (destructured) {
+                return destructured
+                    .split(',')
+                    .map(i => i.trim())
+                    .filter(Boolean)
+                    .map(v => `const ${v} = Me.imports.${relativeModule}.${v};`)
+                    .join('\n');
+            } else {
+                return `const ${single} = Me.imports.${relativeModule}.${single};`;
+            }
         }
-        return `const ${imported} = imports.gi.${module}`;
+    );
+
+    const ast = parser.parse(text, {
+        sourceType: 'module',
+        plugins: ["exportDefaultFrom", "exportNamespaceFrom", "classProperties"]
     });
 
-    // replace import * as Source from "resource:///org/gnome/shell/path/to/source.js"; with const Source = imports.path.to.Source;
-    const regexResource = new RegExp('import \\* as (.+) from \\"resource:\\/\\/\\/org\\/gnome\\/shell\\/(.+)\\.js\\"', 'gm');
-    text = text.replaceAll(regexResource, (match, imported, module) => `const ${imported} = imports.${module.replace('/', '.')}`);
+    traverse(ast, {
+        ImportDeclaration(path) {
+            if (dropImports.includes(path.node.source.value)) path.remove();
+        },
+        enter(path) {
+            // top-level const/let → var
+            if (path.isVariableDeclaration() && path.parent.type === 'Program') {
+                if (path.node.kind === 'const' || path.node.kind === 'let') path.node.kind = 'var';
+            }
+
+            // top-level class → var = class ...
+            if (path.isClassDeclaration() && path.parent.type === 'Program') {
+                const { id, superClass, body } = path.node;
+                path.replaceWith(types.variableDeclaration('var', [
+                    types.variableDeclarator(id, types.classExpression(id, superClass, body, []))
+                ]));
+            }
+
+            // remove exports
+            if (path.isExportNamedDeclaration() || path.isExportDefaultDeclaration()) path.remove();
+        }
+    });
+
+    text = generator(ast, { retainLines: true }).code;
+
+    // handle Mtk replacement
+    text = text.replace(/^(var|let|const)\s+Mtk\s*=\s*imports\.gi\.Mtk\s*;\s*$/m, mtkDefinition);
 
     return text;
 }
@@ -118,96 +227,105 @@ function printError(text) {
     console.error(`\x1b[31m${text}\x1b[0m`);
 }
 
+async function processFiles(files) {
+    await Promise.all(files.map(async (filePath) => {
+        const jsFileContent = await fs.readFile(filePath, 'utf-8');
+        const convertedContent = convertImports(jsFileContent, filePath, distLegacyDir);
+
+        let finalContent;
+        if (filePath.includes("extension.js")) {
+            finalContent = `${globalBanner}${convertedContent}${extensionFooter}`;
+        } else if (filePath.includes("polyfill.js")) {
+            finalContent = `${polyfillBanner}${convertedContent}`;
+        } else if (filePath.includes("prefs.js")) {
+            finalContent = `${prefsBanner}${convertedContent}${prefsFooter}`;
+        } else {
+            finalContent = `${globalBanner}${convertedContent}`;
+        }
+
+        await fs.writeFile(filePath, finalContent, 'utf-8');
+    }));
+}
+
 // build extension
 build({
     logLevel: "info",
-    entryPoints: ['src/extension.ts', 'src/prefs.ts'],
+    entryPoints: ['src/**/*.ts', 'src/styles/stylesheet.scss', 'src/prefs.ts'],
     outdir: distDir,
-    bundle: true,
+    bundle: false,
     treeShaking: false,
-    // firefox60  // Since GJS 1.53.90
-    // firefox68  // Since GJS 1.63.90
-    // firefox78  // Since GJS 1.65.90
-    // firefox91  // Since GJS 1.71.1
-    // firefox102 // Since GJS 1.73.2
     target: 'firefox78',
     platform: 'node',
     format: 'esm',
-    external: ['gi://*', 'resource://*'],
     plugins: [sassPlugin()],
-}).then(() => {
-    // copy resources directory into the build directory
-    fs.renameSync(path.resolve(distDir, "extension.css"), path.resolve(distDir, "stylesheet.css"));
-    fs.cpSync(resourcesDir, distDir, { recursive: true });
-
-    const extFile = `${distDir}/extension.js`;
-    // run preprocessing step
-    console.log("   🛠️ ", "Preprocessing extension.js file...");
-    const preprocessedExt = preprocess(fs.readFileSync(extFile).toString());
-    fs.writeFileSync(extFile, preprocessedExt);
-
-    // warn if you imported GTK libraries in GNOME Shell (Gdk, Gtk or Adw)
-    console.log("   🔍", "Verifying extension.js's imports are all allowed...");
-    const extensionJSContent = preprocessedExt.split('\n');
-    ['Gdk', 'Gtk', 'Adw'].forEach(moduleName => {
-        for (let lineNumber = 0; lineNumber < extensionJSContent.length; lineNumber++) {
-            if (extensionJSContent[lineNumber].indexOf(`import ${moduleName}`) >= 0) {
-                printError(`      ⚠️  ERROR: "${moduleName}" was imported in extension.js at line ${lineNumber}`);
-            }
-        }
-    });
-
-    const prefsFile = `${distDir}/prefs.js`;
-    // run preprocessing step
-    console.log("   🛠️ ", "Preprocessing prefs.js file...");
-    const preprocessedPrefs = preprocess(fs.readFileSync(prefsFile).toString());
-    fs.writeFileSync(prefsFile, preprocessedPrefs);
-
-    // warn if you imported GNOME Shell libraries in Preferences (Clutter, Meta, St or Shell)
-    console.log("   🔍", "Verifying prefs.js's imports are all allowed...");
-    const prefsJSContent = preprocessedPrefs.split('\n');
-    ['Clutter', 'Meta', 'Mtk', 'St', 'Shell'].forEach(moduleName => {
-        for (let lineNumber = 0; lineNumber < prefsJSContent.length; lineNumber++) {
-            if (prefsJSContent[lineNumber].indexOf(`import ${moduleName}`) >= 0) {
-                printError(`      ⚠️  ERROR: "${moduleName}" was imported in prefs.js at line ${lineNumber}`);
-            }
-        }
-    });
 }).then(async () => {
+    // --- Post-build sync steps
+    fsSync.renameSync(path.resolve(distDir, "styles/stylesheet.css"), path.resolve(distDir, "extension.css"));
+    fsSync.cpSync(resourcesDir, distDir, { recursive: true });
+
+    // preprocess extension.js and prefs.js
+    console.log("   🛠️ ", "Preprocessing extension.js and prefs.js...");
+    const [extFile, prefsFile] = [
+        path.join(distDir, 'extension.js'),
+        path.join(distDir, 'prefs.js')
+    ];
+
+    const [preprocessedExt, preprocessedPrefs] = [extFile, prefsFile].map(f =>
+        preprocess(fsSync.readFileSync(f, 'utf8'))
+    );
+    fsSync.writeFileSync(extFile, preprocessedExt);
+    fsSync.writeFileSync(prefsFile, preprocessedPrefs);
+
+    // run both verifications in parallel
+    console.log("   🔍", "Verifying imports...");
+    const generatedFiles = await glob(`${distDir}/**/*.js`, {});
+    const verification = Promise.all(generatedFiles.map(f => {
+        if (f.includes('prefs.js')) verifyImports(preprocessedPrefs, ['Clutter', 'Meta', 'Mtk', 'St', 'Shell'], f);
+        else verifyImports(preprocessedExt, ['Gdk', 'Gtk', 'Adw'], f);
+    }));
+
+    // --- Legacy generation
     console.log("   💡", "Generating legacy version...");
+    fsSync.cpSync(distDir, distLegacyDir, { recursive: true });
 
-    // duplicate the build into distLegacyDir
-    fs.cpSync(distDir, distLegacyDir, { recursive: true });
-
-    // for each js file in distLegacyDir, apply conversion
     const files = await glob(`${distLegacyDir}/**/*.js`, {});
-    for (let file of files) {
-        let jsFileContent = fs.readFileSync(file).toString();
-        let convertedContent = convertImports(jsFileContent);
-        if (file.indexOf("extension.js") >= 0) {
-            fs.writeFileSync(file, `${extensionBanner}${convertedContent}${extensionFooter}`);
-        } else if (file.indexOf("prefs.js") >= 0) {
-            fs.writeFileSync(file, `${prefsBanner}${convertedContent}${prefsFooter}`);
-        } else {
-            fs.writeFileSync(file, convertedContent);
-        }
-    }
-    const metadataFile = path.resolve(resourcesDir, 'metadata.json');
-    const metadataJson = JSON.parse(fs.readFileSync(metadataFile));
-    const legacyShellVersions = metadataJson["shell-version"].filter(version => Number(version) <= 44);
-    const nonLegacyShellVersions = metadataJson["shell-version"].filter(version => Number(version) > 44);
+    const metadataJson = await fs.readFile(path.resolve(resourcesDir, 'metadata.json')).then(JSON.parse);
 
-    // remove legacy versions from main version's metadata file
-    console.log("   🚀", "Updating metadata.json file...");
-    metadataJson["shell-version"] = nonLegacyShellVersions;
-    fs.writeFileSync(path.resolve(distDir, 'metadata.json'), JSON.stringify(metadataJson, null, 4));
+    // prepare metadata updates
+    const legacyShellVersions = metadataJson["shell-version"].filter(v => +v <= 44);
+    const nonLegacyShellVersions = metadataJson["shell-version"].filter(v => +v > 44);
 
-    // keep legacy versions only in the legacy extension's metadata file
-    metadataJson["shell-version"] = legacyShellVersions;
-    fs.writeFileSync(path.resolve(distLegacyDir, 'metadata.json'), JSON.stringify(metadataJson, null, 4));
+    // in parallel: update metadata, wait for verification, process files to create legacy version
+    await Promise.all([
+        verification,
+        fs.writeFile(
+            path.join(distDir, 'metadata.json'),
+            JSON.stringify({ ...metadataJson, 'shell-version': nonLegacyShellVersions }, null, 4)
+        ),
+        fs.writeFile(
+            path.join(distLegacyDir, 'metadata.json'),
+            JSON.stringify({ ...metadataJson, 'shell-version': legacyShellVersions }, null, 4)
+        ),
+        processFiles(files)   // convert all JS files to support legacy GNOME
+    ]);
+
     console.log();
     console.log("📁 ", "Main version directory:  ", distDir);
     console.log("📁 ", "Legacy version directory:", distLegacyDir);
     console.log("📖 ", "Main version for GNOME Shells:  ", nonLegacyShellVersions);
     console.log("📖 ", "Legacy version for GNOME Shells:", legacyShellVersions);
 });
+
+function verifyImports(content, modules, fileName) {
+    return new Promise(resolve => {
+        const lines = content.split('\n');
+        modules.forEach(m => {
+            lines.forEach((line, i) => {
+                if (line.includes(`import ${m}`)) {
+                    printError(`      ⚠️  ERROR: "${m}" was imported in ${fileName} at line ${i}`);
+                }
+            });
+        });
+        resolve();
+    });
+}

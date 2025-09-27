@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Meta } from '@gi.ext';
-import { logger } from '@utils/logger';
+import { Meta } from '../../gi/ext';
+import { logger } from '../../utils/logger';
 
 const debug = logger('MetaWindowGroup');
 

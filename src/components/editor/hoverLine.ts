@@ -1,7 +1,7 @@
-import { registerGObjectClass } from '@/utils/gjs';
-import { GLib, St, Clutter, Shell } from '@gi.ext';
+import { registerGObjectClass } from '../../utils/gjs';
+import { GLib, St, Clutter, Shell } from '../../gi/ext';
 import EditableTilePreview from './editableTilePreview';
-import { getScalingFactorOf } from '@utils/ui';
+import { getScalingFactorOf } from '../../utils/ui';
 
 @registerGObjectClass
 export default class HoverLine extends St.Widget {
