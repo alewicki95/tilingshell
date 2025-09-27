@@ -22,7 +22,7 @@
 
 import './styles/stylesheet.scss';
 
-import { Gio, GLib, Meta, Soup } from '@gi.ext';
+import { Gio, GLib, Meta } from '@gi.ext';
 import { logger } from '@utils/logger';
 import {
     filterUnfocusableWindows,
@@ -53,7 +53,6 @@ import { Extension } from '@polyfill';
 import OverriddenAltTab from '@components/altTab/overriddenAltTab';
 import { LayoutSwitcherPopup } from '@components/layoutSwitcher/layoutSwitcher';
 import { unmaximizeWindow } from '@utils/gnomesupport';
-import * as Config from 'resource:///org/gnome/shell/misc/config.js';
 
 const debug = logger('extension');
 
@@ -89,40 +88,6 @@ export default class TilingShellExtension extends Extension {
         if (Settings.LAST_VERSION_NAME_INSTALLED === '14.0') {
             debug('apply compatibility changes');
             Settings.save_selected_layouts([]);
-        }
-
-        if (
-            Settings.LAST_VERSION_NAME_INSTALLED !==
-            this.metadata['version-name']
-        ) {
-            try {
-                const distro = (GLib.get_os_info('ID') ?? 'unknown')
-                    .trim()
-                    .replaceAll(' ', '');
-                const [major] = Config.PACKAGE_VERSION.split('.');
-                const se = new Soup.Session();
-                // Check if the beta is available
-                if (Soup.MAJOR_VERSION >= 3) {
-                    const request = Soup.Message.new_from_encoded_form(
-                        'GET',
-                        'https://tilingshell.netlify.app/beta',
-                        Soup.form_encode_hash({
-                            distro,
-                            gnome: major.trim().replaceAll(' ', ''),
-                        }),
-                    );
-                    se.send_and_read_async(
-                        request,
-                        GLib.PRIORITY_DEFAULT,
-                        null,
-                        (session: Soup.Session, result: Gio.AsyncResult) => {
-                            this._processBetaResponse(session, request, result);
-                        },
-                    );
-                }
-            } catch (ex) {
-                debug('Error catched.', ex);
-            }
         }
 
         // Setting used for compatibility changes if necessary
@@ -765,23 +730,6 @@ export default class TilingShellExtension extends Extension {
                         feat === 'x11-randr-fractional-scaling',
                 ) !== undefined
         );
-    }
-
-    private _processBetaResponse(
-        session: Soup.Session,
-        message: Soup.Message,
-        result: Gio.AsyncResult,
-    ) {
-        if (message.get_status() === Soup.Status.OK) {
-            const decoder = new TextDecoder('utf-8');
-            const bytes = session.send_and_read_finish(result);
-            const response = decoder.decode(bytes.get_data());
-            // TODO show beta availability
-            // debug(response);
-            debug('Beta is available!');
-        } else {
-            debug(`Returned status code: ${message.get_status()}`);
-        }
     }
 
     disable(): void {
