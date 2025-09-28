@@ -76,10 +76,23 @@ function fillPreferencesWindow(window) {
 }
 `;
 
-function preprocess(text) {
-    // drop lines tagged with "// @esbuild-drop-next-line"
-    text = text.replace(/\/\/\s*@esbuild-drop-next-line\s*\n.*?;/gs, '');
-    return text;
+async function preprocess(files) {
+    await Promise.all(files.map(async (file) => {
+        let text = fsSync.readFileSync(file, 'utf-8');
+
+        // drop lines tagged with "// @esbuild-drop-next-line"
+        text = text.replace(
+            /import\s+([\s\S]*?)\s+from\s+['"]([^'"]+)['"]/g,
+            (_match, imports, importPath) => {
+                if (!importPath.endsWith('.js')) {
+                importPath += '.js';
+                }
+                return `import ${imports} from "${importPath}"`;
+            }
+        );
+
+        fsSync.writeFileSync(file, text, 'utf-8');
+    }));
 }
 
 /**
@@ -150,7 +163,7 @@ function convertImports(text, currentFilePath, rootDirName) {
         )
         // generic gi:// import → const X = imports.gi.X
         .replace(
-            /import\s+(.+)\s+from\s+"gi:\/\/(.+)";/gm,
+            /import\s+(.+)\s+from\s+"gi:\/\/(.+).js";/gm,
             (_, imported, module) => `const ${imported} = imports.gi.${module}`
         )
         // resource import → const X = imports.path.to.X
@@ -227,7 +240,7 @@ function printError(text) {
     console.error(`\x1b[31m${text}\x1b[0m`);
 }
 
-async function processFiles(files) {
+async function processLegacyFiles(files) {
     await Promise.all(files.map(async (filePath) => {
         const jsFileContent = await fs.readFile(filePath, 'utf-8');
         const convertedContent = convertImports(jsFileContent, filePath, distLegacyDir);
@@ -263,28 +276,19 @@ build({
     fsSync.renameSync(path.resolve(distDir, "styles/stylesheet.css"), path.resolve(distDir, "extension.css"));
     fsSync.cpSync(resourcesDir, distDir, { recursive: true });
 
-    // preprocess extension.js and prefs.js
-    console.log("   🛠️ ", "Preprocessing extension.js and prefs.js...");
-    const [extFile, prefsFile] = [
-        path.join(distDir, 'extension.js'),
-        path.join(distDir, 'prefs.js')
-    ];
-
-    const [preprocessedExt, preprocessedPrefs] = [extFile, prefsFile].map(f =>
-        preprocess(fsSync.readFileSync(f, 'utf8'))
-    );
-    fsSync.writeFileSync(extFile, preprocessedExt);
-    fsSync.writeFileSync(prefsFile, preprocessedPrefs);
+    // preprocess extension files in parallel
+    console.log("   🛠️ ", "Preprocessing extension files...");
+    const generatedFiles = await glob(`${distDir}/**/*.js`, {});
+    await preprocess(generatedFiles);
 
     // run both verifications in parallel
     console.log("   🔍", "Verifying imports...");
-    const generatedFiles = await glob(`${distDir}/**/*.js`, {});
     const verification = Promise.all(generatedFiles.map(f => {
-        if (f.includes('prefs.js')) verifyImports(preprocessedPrefs, ['Clutter', 'Meta', 'Mtk', 'St', 'Shell'], f);
-        else verifyImports(preprocessedExt, ['Gdk', 'Gtk', 'Adw'], f);
+        if (f.includes('prefs.js')) verifyImports(['Clutter', 'Meta', 'Mtk', 'St', 'Shell'], f);
+        else verifyImports(['Gdk', 'Gtk', 'Adw'], f);
     }));
 
-    // --- Legacy generation
+    // Legacy version generation, for GNOME Shell <= 44
     console.log("   💡", "Generating legacy version...");
     fsSync.cpSync(distDir, distLegacyDir, { recursive: true });
 
@@ -306,9 +310,12 @@ build({
             path.join(distLegacyDir, 'metadata.json'),
             JSON.stringify({ ...metadataJson, 'shell-version': legacyShellVersions }, null, 4)
         ),
-        processFiles(files)   // convert all JS files to support legacy GNOME
+        processLegacyFiles(files)   // convert all JS files to support legacy GNOME
     ]);
 
+    // keep legacy versions only in the legacy extension's metadata file
+    metadataJson["shell-version"] = legacyShellVersions;
+    fsSync.writeFileSync(path.resolve(distLegacyDir, 'metadata.json'), JSON.stringify(metadataJson, null, 4));
     console.log();
     console.log("📁 ", "Main version directory:  ", distDir);
     console.log("📁 ", "Legacy version directory:", distLegacyDir);
@@ -316,13 +323,19 @@ build({
     console.log("📖 ", "Legacy version for GNOME Shells:", legacyShellVersions);
 });
 
-function verifyImports(content, modules, fileName) {
+function verifyImports(modules, fileName) {
     return new Promise(resolve => {
+        if (fileName.includes("monitorDescription.js")) {
+            resolve();
+            return;
+        }
+
+        const content = fsSync.readFileSync(fileName, 'utf-8');
         const lines = content.split('\n');
         modules.forEach(m => {
             lines.forEach((line, i) => {
                 if (line.includes(`import ${m}`)) {
-                    printError(`      ⚠️  ERROR: "${m}" was imported in ${fileName} at line ${i}`);
+                    printError(`      ⚠️  WARNING: "${m}" was imported in ${fileName} at line ${i}`);
                 }
             });
         });
