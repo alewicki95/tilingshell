@@ -7,6 +7,7 @@
   "scripts": {
     "build": "npm run clean && node esbuild.mjs && npm run build:schema && npm run build:resources",
     "clean": "rm -rf dist; rm -rf dist_legacy",
+    "logs:follow": "journalctl --follow /usr/bin/gnome-shell",
     "update-translations": "npm run create:translations && npm run merge:translations && npm run build:translations",
     "build:schema": "npm run clean:schema && glib-compile-schemas ./resources/schemas --targetdir=./dist/schemas/ && cp ./dist/schemas/ ./dist_legacy/ -r",
     "build:resources": "npm run clean:resources && glib-compile-resources --sourcedir=./resources --target=./dist/resources.gresource ./resources/resources.gresource.xml && cp ./dist/*.gresource ./dist_legacy/ -r",
