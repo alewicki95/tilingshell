@@ -1,5 +1,5 @@
 import { Clutter } from '../../gi/ext';
-import { registerGObjectClass } from '../..//utils/gjs';
+import { registerGObjectClass } from '../../utils/gjs';
 import { buildRectangle } from '../../utils/ui';
 import Tile from '../../components/layout/Tile';
 import TilePreview, {

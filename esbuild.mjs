@@ -80,12 +80,12 @@ async function preprocess(files) {
     await Promise.all(files.map(async (file) => {
         let text = fsSync.readFileSync(file, 'utf-8');
 
-        // drop lines tagged with "// @esbuild-drop-next-line"
+        // TODO drop lines tagged with "// @esbuild-drop-next-line"
         text = text.replace(
             /import\s+([\s\S]*?)\s+from\s+['"]([^'"]+)['"]/g,
             (_match, imports, importPath) => {
-                if (!importPath.endsWith('.js')) {
-                importPath += '.js';
+                if (!importPath.endsWith('.js') && !importPath.startsWith('gi://')) {
+                    importPath += '.js';
                 }
                 return `import ${imports} from "${importPath}"`;
             }
@@ -163,7 +163,7 @@ function convertImports(text, currentFilePath, rootDirName) {
         )
         // generic gi:// import → const X = imports.gi.X
         .replace(
-            /import\s+(.+)\s+from\s+"gi:\/\/(.+).js";/gm,
+            /import\s+(.+)\s+from\s+"gi:\/\/(.+)";/gm,
             (_, imported, module) => `const ${imported} = imports.gi.${module}`
         )
         // resource import → const X = imports.path.to.X

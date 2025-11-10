@@ -4,7 +4,7 @@ import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import Settings from '../settings/settings';
 import Layout from '../components/layout/Layout';
 import Tile from '../components/layout/Tile';
-import LayoutEditor from '..//components/editor/layoutEditor';
+import LayoutEditor from '../components/editor/layoutEditor';
 import DefaultMenu from './defaultMenu';
 import GlobalState from '../utils/globalState';
 import EditingMenu from './editingMenu';
@@ -12,8 +12,6 @@ import EditorDialog from '../components/editor/editorDialog';
 import CurrentMenu from './currentMenu';
 import { registerGObjectClass } from '../utils/gjs';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
-import { getWindows } from '../utils/ui';
-import ExtendedWindow from '../components/tilingsystem/extendedWindow';
 
 enum IndicatorState {
     DEFAULT = 1,

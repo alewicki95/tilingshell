@@ -11,8 +11,8 @@ import {
     isPointInsideRect,
     isTileOnContainerBorder,
     squaredEuclideanDistance,
-} from '../..//utils/ui';
-import TilingLayout from '../..//components/tilingsystem/tilingLayout';
+} from '../../utils/ui';
+import TilingLayout from '../../components/tilingsystem/tilingLayout';
 import SnapAssist from '../snapassist/snapAssist';
 import SelectionTilePreview from '../tilepreview/selectionTilePreview';
 import { ActivationKey } from '../../settings/settings';
