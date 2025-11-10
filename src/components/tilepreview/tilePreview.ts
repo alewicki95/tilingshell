@@ -3,9 +3,6 @@ import { registerGObjectClass } from '../../utils/gjs';
 import { buildRectangle, getScalingFactorOf } from '../../utils/ui';
 import GlobalState from '../../utils/globalState';
 import Tile from '../../components/layout/Tile';
-import { logger } from '../../utils/logger';
-
-const debug = logger('TilePreview');
 
 // export module TilePreview {
 export interface TilePreviewConstructorProperties

@@ -12,11 +12,8 @@ import {
     squaredEuclideanDistance,
 } from '../../utils/ui';
 import TileUtils from '../../components/layout/TileUtils';
-import { logger } from '../../utils/logger';
 import GlobalState from '../../utils/globalState';
 import { KeyBindingsDirection } from '../../keybindings';
-
-const debug = logger('TilingLayout');
 
 @registerGObjectClass
 class DynamicTilePreview extends TilePreview {

@@ -4,9 +4,6 @@ import TilePreview from './tilePreview';
 import Settings from '../../settings/settings';
 import { buildBlurEffect } from '../../utils/gnomesupport';
 import Tile from '../../components/layout/Tile';
-import { logger } from '../../utils/logger';
-
-const debug = logger('SelectionTilePreview');
 
 @registerGObjectClass
 export default class SelectionTilePreview extends TilePreview {

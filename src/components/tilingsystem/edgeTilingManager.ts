@@ -3,10 +3,9 @@ import {
     isPointInsideRect,
     clampPointInsideRect,
 } from '../../utils/ui';
-import { GObject, Mtk, St } from '../../gi/ext';
+import { GObject, Mtk } from '../../gi/ext';
 import Settings from '../../settings/settings';
 import { registerGObjectClass } from '../../utils/gjs';
-import { logger } from '../../utils/logger';
 
 const TOP_EDGE_TILING_OFFSET = 8;
 const QUARTER_PERCENTAGE = 0.5;

@@ -45,7 +45,7 @@ var Extension = class {
 }
 `;
 
-const extensionFooter = `
+const extensionFooter = `// For GNOME Shell version before 45
 function init(meta) {
     imports.misc.extensionUtils.initTranslations();
     return new TilingShellExtension(meta);
@@ -64,7 +64,7 @@ class ExtensionPreferences {
 }
 `;
 
-const prefsFooter = `
+const prefsFooter = `// For GNOME Shell version before 45
 function init() {
     imports.misc.extensionUtils.initTranslations();
 }
@@ -80,7 +80,10 @@ async function preprocess(files) {
     await Promise.all(files.map(async (file) => {
         let text = fsSync.readFileSync(file, 'utf-8');
 
-        // TODO drop lines tagged with "// @esbuild-drop-next-line"
+        // drop lines tagged with "// @esbuild-drop-next-line"
+        text = text.replace(/\/\/\s*@esbuild-drop-next-line\s*\n.*?;/gs, '');
+
+        // Ensure every import has ".js" at end end, excluding GJS imports
         text = text.replace(
             /import\s+([\s\S]*?)\s+from\s+['"]([^'"]+)['"]/g,
             (_match, imports, importPath) => {
@@ -245,6 +248,7 @@ async function processLegacyFiles(files) {
         const jsFileContent = await fs.readFile(filePath, 'utf-8');
         const convertedContent = convertImports(jsFileContent, filePath, distLegacyDir);
 
+        // append banners
         let finalContent;
         if (filePath.includes("extension.js")) {
             finalContent = `${globalBanner}${convertedContent}${extensionFooter}`;
@@ -273,7 +277,7 @@ build({
     plugins: [sassPlugin()],
 }).then(async () => {
     // --- Post-build sync steps
-    fsSync.renameSync(path.resolve(distDir, "styles/stylesheet.css"), path.resolve(distDir, "extension.css"));
+    fsSync.renameSync(path.resolve(distDir, "styles/stylesheet.css"), path.resolve(distDir, "stylesheet.css"));
     fsSync.cpSync(resourcesDir, distDir, { recursive: true });
 
     // preprocess extension files in parallel

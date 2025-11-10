@@ -13,7 +13,6 @@ import {
     getMonitorScalingFactor,
     getScalingFactorOf,
 } from '../../utils/ui';
-import { logger } from '../../utils/logger';
 import { buildBlurEffect } from '../../utils/gnomesupport';
 
 export const SNAP_ASSIST_SIGNAL = 'snap-assist';
@@ -22,8 +21,6 @@ const GAPS = 4;
 // 16:9 ratio and then rounded to int
 const SNAP_ASSIST_LAYOUT_WIDTH = 120;
 const SNAP_ASSIST_LAYOUT_HEIGHT = 68;
-
-const debug = logger('SnapAssist');
 
 @registerGObjectClass
 class SnapAssistContent extends St.BoxLayout {
