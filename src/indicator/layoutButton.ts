@@ -6,8 +6,9 @@ import Tile from '../components/layout/Tile';
 import { buildMarginOf, buildRectangle, getScalingFactorOf } from '../utils/ui';
 import { registerGObjectClass } from '../utils/gjs';
 
-@registerGObjectClass
 class LayoutButtonWidget extends LayoutWidget<SnapAssistTile> {
+    static { registerGObjectClass(this) }
+
     constructor(
         parent: Clutter.Actor,
         layout: Layout,
@@ -35,8 +36,9 @@ class LayoutButtonWidget extends LayoutWidget<SnapAssistTile> {
     }
 }
 
-@registerGObjectClass
 export default class LayoutButton extends St.Button {
+    static { registerGObjectClass(this) }
+
     constructor(
         parent: Clutter.Actor,
         layout: Layout,

@@ -20,8 +20,9 @@ const MIN_RADIUS = 2;
  * - Adjusts the theme between light and dark based on text color contrast.
  * - Listens for theme changes and updates styles dynamically.
  */
-@registerGObjectClass
 export default class SnapAssistTile extends TilePreview {
+    static { registerGObjectClass(this) }
+    
     private _styleChangedSignalID: number | undefined;
 
     constructor(params: {

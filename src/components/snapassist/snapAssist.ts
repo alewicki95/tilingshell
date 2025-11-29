@@ -22,9 +22,8 @@ const GAPS = 4;
 const SNAP_ASSIST_LAYOUT_WIDTH = 120;
 const SNAP_ASSIST_LAYOUT_HEIGHT = 68;
 
-@registerGObjectClass
 class SnapAssistContent extends St.BoxLayout {
-    static metaInfo: GObject.MetaInfo<unknown, unknown, unknown> = {
+    static { registerGObjectClass(this, {
         GTypeName: 'SnapAssistContent',
         Properties: {
             blur: GObject.ParamSpec.boolean(
@@ -53,7 +52,7 @@ class SnapAssistContent extends St.BoxLayout {
                 180,
             ),
         },
-    };
+    })};
 
     private readonly _container: St.Widget;
 
@@ -388,16 +387,15 @@ class SnapAssistContent extends St.BoxLayout {
     }
 }
 
-@registerGObjectClass
 export default class SnapAssist extends St.Widget {
-    static metaInfo: GObject.MetaInfo<unknown, unknown, unknown> = {
+    static { registerGObjectClass(this, {
         GTypeName: 'SnapAssist',
         Signals: {
             'snap-assist': {
                 param_types: [Tile.$gtype, String.$gtype], // tile, layout_id
             },
         },
-    };
+    })};
 
     private readonly _content: SnapAssistContent;
 

@@ -6,8 +6,9 @@ import SnapAssistTile from './snapAssistTile';
 import Layout from '../../components/layout/Layout';
 import { buildRectangle } from '../../utils/ui';
 
-@registerGObjectClass
 export default class SnapAssistLayout extends LayoutWidget<SnapAssistTile> {
+    static { registerGObjectClass(this) }
+    
     constructor(
         parent: St.Widget,
         layout: Layout,

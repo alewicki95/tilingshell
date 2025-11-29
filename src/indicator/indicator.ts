@@ -19,8 +19,9 @@ enum IndicatorState {
     EDITING_LAYOUT,
 }
 
-@registerGObjectClass
 export default class Indicator extends PanelMenu.Button {
+    static { registerGObjectClass(this) }
+    
     private _layoutEditor: LayoutEditor | null;
     private _editorDialog: EditorDialog | null;
     private _currentMenu: CurrentMenu | null;

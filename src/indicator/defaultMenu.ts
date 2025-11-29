@@ -24,16 +24,15 @@ import { createButton, createIconButton } from './utils';
 
 const debug = logger('DefaultMenu');
 
-@registerGObjectClass
 class LayoutsRow extends St.BoxLayout {
-    static metaInfo: GObject.MetaInfo<unknown, unknown, unknown> = {
+    static { registerGObjectClass(this, {
         GTypeName: 'LayoutsRow',
         Signals: {
             'selected-layout': {
                 param_types: [GObject.TYPE_STRING],
             },
         },
-    };
+    })};
 
     private _layoutsBox: St.BoxLayout;
     private _layoutsButtons: LayoutButton[];

@@ -19,8 +19,9 @@ import HoverLine from './hoverLine';
 import { Monitor } from 'resource:///org/gnome/shell/ui/layout.js';
 import { getEventCoords } from '../../utils/gnomesupport';
 
-@registerGObjectClass
 export default class LayoutEditor extends St.Widget {
+    static { registerGObjectClass(this) }
+    
     private _layout: Layout;
     private _containerRect: Mtk.Rectangle;
     private _innerGaps: Clutter.Margin;

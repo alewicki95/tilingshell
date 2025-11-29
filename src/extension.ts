@@ -43,7 +43,7 @@ import SettingsOverride from './settings/settingsOverride';
 import { ResizingManager } from './components/tilingsystem/resizeManager';
 import OverriddenWindowMenu from './components/window_menu/overriddenWindowMenu';
 import Tile from './components/layout/Tile';
-import { WindowBorderManager } from './components/windowBorderManager';
+import { WindowBorderManager } from './components/windowBorder/windowBorderManager';
 import TilingShellWindowManager from './components/windowManager/tilingShellWindowManager';
 import ExtendedWindow from './components/tilingsystem/extendedWindow';
 import OverriddenAltTab from './components/altTab/overriddenAltTab';

@@ -49,16 +49,15 @@ export function buildMenuWithLayoutIcon(
     layoutIcon.set_x_align(Clutter.ActorAlign.END);
 }
 
-@registerGObjectClass
 export default class OverriddenWindowMenu extends GObject.Object {
-    static metaInfo: GObject.MetaInfo<unknown, unknown, unknown> = {
+    static { registerGObjectClass(this, {
         GTypeName: 'OverriddenWindowMenu',
         Signals: {
             'tile-clicked': {
                 param_types: [Tile.$gtype, Meta.Window.$gtype],
             },
         },
-    };
+    })};
 
     private static _instance: OverriddenWindowMenu | null = null;
     private static _old_buildMenu: ((_window: Meta.Window) => void) | null;

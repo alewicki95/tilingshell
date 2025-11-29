@@ -6,8 +6,9 @@ import { registerGObjectClass } from '../../utils/gjs';
 import { buildRectangle, getScalingFactorOf } from '../../utils/ui';
 import { Clutter, Mtk } from '../../gi/ext';
 
-@registerGObjectClass
 export default class LayoutIcon extends LayoutWidget<SnapAssistTile> {
+    static { registerGObjectClass(this) }
+    
     constructor(
         parent: Clutter.Actor,
         importantTiles: Tile[],

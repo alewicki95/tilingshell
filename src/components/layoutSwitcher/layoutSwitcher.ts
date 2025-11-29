@@ -16,8 +16,9 @@ const LAYOUT_HEIGHT: number = 72;
 const LAYOUT_WIDTH: number = 128; // 16:9 ratio. -> (16*layoutHeight) / 9 and then rounded to int
 const GAPS = 3;
 
-@registerGObjectClass
 class LayoutSwitcherList extends SwitcherPopup.SwitcherList {
+    static { registerGObjectClass(this) }
+
     // those are defined in the parent but we lack them in the type definition
     // @esbuild-drop-next-line
     private _items!: St.Widget[];
@@ -78,8 +79,9 @@ class LayoutSwitcherList extends SwitcherPopup.SwitcherList {
     }
 }
 
-@registerGObjectClass
 export class LayoutSwitcherPopup extends SwitcherPopup.SwitcherPopup {
+    static { registerGObjectClass(this) }
+    
     // those are defined in the parent but we lack them in the type definition
     // @esbuild-drop-next-line
     private _switcherList: LayoutSwitcherList;

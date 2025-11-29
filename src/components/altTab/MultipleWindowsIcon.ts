@@ -10,8 +10,9 @@ import { _ } from '../../translations';
 
 const OUTER_GAPS = 2;
 
-@registerGObjectClass
 export default class MultipleWindowsIcon extends LayoutWidget<TilePreviewWithWindow> {
+    static { registerGObjectClass(this) }
+
     private _label: St.Label;
     private _window: MetaWindowGroup;
 

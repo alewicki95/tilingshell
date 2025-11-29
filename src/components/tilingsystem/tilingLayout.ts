@@ -15,8 +15,9 @@ import TileUtils from '../../components/layout/TileUtils';
 import GlobalState from '../../utils/globalState';
 import { KeyBindingsDirection } from '../../keybindings';
 
-@registerGObjectClass
 class DynamicTilePreview extends TilePreview {
+    static { registerGObjectClass(this) }
+
     private _originalRect: Mtk.Rectangle;
     private _canRestore: boolean;
 
@@ -52,8 +53,9 @@ class DynamicTilePreview extends TilePreview {
  * it is possible to easily show and hide each tile at the same time and to get the
  * hovered tile.
  */
-@registerGObjectClass
 export default class TilingLayout extends LayoutWidget<DynamicTilePreview> {
+    static { registerGObjectClass(this) }
+    
     private _showing: boolean;
 
     constructor(

@@ -3,8 +3,9 @@ import { GLib, St, Clutter, Shell } from '../../gi/ext';
 import EditableTilePreview from './editableTilePreview';
 import { getScalingFactorOf } from '../../utils/ui';
 
-@registerGObjectClass
 export default class HoverLine extends St.Widget {
+    static { registerGObjectClass(this) }
+    
     private readonly _hoverTimer: number;
     private readonly _size: number;
 

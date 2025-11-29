@@ -6,8 +6,9 @@ import TilePreview, {
     TilePreviewConstructorProperties,
 } from '../../components/tilepreview/tilePreview';
 
-@registerGObjectClass
 export default class TilePreviewWithWindow extends TilePreview {
+    static { registerGObjectClass(this) }
+    
     constructor(params: Partial<TilePreviewConstructorProperties>) {
         super(params);
         if (params.parent) params.parent.add_child(this);

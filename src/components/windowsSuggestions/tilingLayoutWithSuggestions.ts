@@ -16,8 +16,9 @@ import { unmaximizeWindow } from '../../utils/gnomesupport';
 const ANIMATION_SPEED = 200;
 const MASONRY_LAYOUT_ROW_HEIGHT = 0.31;
 
-@registerGObjectClass
 export default class TilingLayoutWithSuggestions extends LayoutWidget<SuggestionsTilePreview> {
+    static { registerGObjectClass(this) }
+    
     private _signals: SignalHandling;
     private _lastTiledWindow: Meta.Window | null;
     private _showing: boolean;

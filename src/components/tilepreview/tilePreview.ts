@@ -1,8 +1,8 @@
 import { St, Clutter, Mtk, Meta } from '../../gi/ext';
-import { registerGObjectClass } from '../../utils/gjs';
 import { buildRectangle, getScalingFactorOf } from '../../utils/ui';
 import GlobalState from '../../utils/globalState';
 import Tile from '../../components/layout/Tile';
+import { registerGObjectClass } from '../../utils/gjs';
 
 // export module TilePreview {
 export interface TilePreviewConstructorProperties
@@ -14,8 +14,9 @@ export interface TilePreviewConstructorProperties
 }
 // }
 
-@registerGObjectClass
 export default class TilePreview extends St.Widget {
+    static { registerGObjectClass(this) }
+
     protected _rect: Mtk.Rectangle;
     protected _showing: boolean;
     protected _tile: Tile;

@@ -1,21 +1,20 @@
 import TilePreview from '../tilepreview/tilePreview';
-import { GObject, St, Clutter, Mtk } from '../../gi/ext';
+import { St, Clutter, Mtk } from '../../gi/ext';
 import Tile from '../layout/Tile';
 import Slider from './slider';
 import TileUtils from '../layout/TileUtils';
 import { registerGObjectClass } from '../../utils/gjs';
 import { buildTileGaps } from '../../utils/ui';
 
-@registerGObjectClass
 export default class EditableTilePreview extends TilePreview {
-    static metaInfo: GObject.MetaInfo<unknown, unknown, unknown> = {
+    static { registerGObjectClass(this, {
         Signals: {
             'size-changed': {
                 param_types: [Mtk.Rectangle.$gtype, Mtk.Rectangle.$gtype], // oldSize, newSize
             },
         },
         GTypeName: 'EditableTilePreview',
-    };
+    })};
 
     public static MIN_TILE_SIZE: number = 140;
 

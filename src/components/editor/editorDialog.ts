@@ -15,8 +15,9 @@ import {
 import { _ } from '../../translations';
 import { widgetOrientation } from '../../utils/gnomesupport';
 
-@registerGObjectClass
 export default class EditorDialog extends ModalDialog.ModalDialog {
+    static { registerGObjectClass(this) }
+
     private readonly _layoutHeight: number = 72;
     private readonly _layoutWidth: number = 128; // 16:9 ratio. -> (16*layoutHeight) / 9 and then rounded to int
     private readonly _gapsSize: number = 3;

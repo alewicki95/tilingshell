@@ -3,8 +3,9 @@ import { Clutter } from '../../gi/ext';
 
 const MASONRY_ROW_MIN_HEIGHT_PERCENTAGE = 0.15;
 
-@registerGObjectClass
 export default class MasonryLayoutManager extends Clutter.LayoutManager {
+    static { registerGObjectClass(this) }
+    
     private _rowCount: number;
     private _spacing: number;
     private _maxRowHeight: number;

@@ -1,30 +1,27 @@
-import { GObject, Meta, St, Clutter, Shell, Gio, GLib } from '../gi/ext';
-import SignalHandling from '../utils/signalHandling';
-import { logger } from '../utils/logger';
-import { registerGObjectClass } from '../utils/gjs';
-import Settings from '../settings/settings';
+import { GObject, Meta, St, Clutter, Shell, Gio, GLib } from '../../gi/ext';
+import SignalHandling from '../../utils/signalHandling';
+import { registerGObjectClass } from '../../utils/gjs';
+import Settings from '../../settings/settings';
 import {
     buildRectangle,
     enableScalingFactorSupport,
     getMonitorScalingFactor,
     getScalingFactorOf,
     getScalingFactorSupportString,
-} from '../utils/ui';
+} from '../../utils/ui';
 
 Gio._promisify(Shell.Screenshot, 'composite_to_stream');
 
 const DEFAULT_BORDER_RADIUS = 11;
-const SMART_BORDER_RADIUS_DELAY = 460;
 const SMART_BORDER_RADIUS_FIRST_FRAME_DELAY = 240;
-
-const debug = logger('WindowBorderManager');
 
 interface WindowWithCachedRadius extends Meta.Window {
     __ts_cached_radius: [number, number, number, number] | undefined;
 }
 
-@registerGObjectClass
-class WindowBorder extends St.Bin {
+export default class WindowBorder extends St.Bin {
+    static { registerGObjectClass(this) }
+
     private readonly _signals: SignalHandling;
 
     private _window: Meta.Window;
@@ -323,30 +320,6 @@ class WindowBorder extends St.Bin {
             cached_radius;
     }
 
-    private _getGnomeAccentColor(): string {
-        // get the system's accent color, fallback to user's custom color
-        try {
-            const accentColorName =
-                this._interfaceSettings.get_string('accent-color');
-            debug('accentColorName', accentColorName);
-            return accentColorName;
-            const gnomeAccentColorMapping: Record<string, string> = {
-                blue: '#3584e4',
-                teal: '#2190a4',
-                green: '#3a944a',
-                yellow: '#c88800',
-                orange: '#ed5b00',
-                red: '#e62d42',
-                pink: '#d56199',
-                purple: '#9141ac',
-                slate: '#6f8396',
-            };
-            return gnomeAccentColorMapping[accentColorName];
-        } catch (_unused) {
-            return '#000000';
-        }
-    }
-
     public updateStyle(): void {
         // handle scale factor of the monitor
         const monitorScalingFactor = this._enableScaling
@@ -407,101 +380,3 @@ class WindowBorder extends St.Bin {
         this.hide();
     }
 }
-
-export class WindowBorderManager {
-    private readonly _signals: SignalHandling;
-
-    private _border: WindowBorder | null;
-    private _enableScaling: boolean;
-    private _interfaceSettings: Gio.Settings;
-
-    constructor(enableScaling: boolean) {
-        this._signals = new SignalHandling();
-        this._border = null;
-        this._enableScaling = enableScaling;
-        this._interfaceSettings = new Gio.Settings({
-            schema_id: 'org.gnome.desktop.interface',
-        });
-    }
-
-    public enable(): void {
-        if (Settings.ENABLE_WINDOW_BORDER) this._turnOn();
-
-        // enable/disable based on user preferences
-        this._signals.connect(
-            Settings,
-            Settings.KEY_ENABLE_WINDOW_BORDER,
-            () => {
-                if (Settings.ENABLE_WINDOW_BORDER) this._turnOn();
-                else this._turnOff();
-            },
-        );
-    }
-
-    private _turnOn() {
-        this._onWindowFocused();
-        this._signals.connect(
-            global.display,
-            'notify::focus-window',
-            this._onWindowFocused.bind(this),
-        );
-        this._signals.connect(Settings, Settings.KEY_WINDOW_BORDER_COLOR, () =>
-            this._border?.updateStyle(),
-        );
-        this._signals.connect(
-            Settings,
-            Settings.KEY_WINDOW_USE_CUSTOM_BORDER_COLOR,
-            () => this._border?.updateStyle(),
-        );
-        this._interfaceSettings.connect('changed::accent-color', () =>
-            this._border?.updateStyle(),
-        );
-        this._signals.connect(Settings, Settings.KEY_WINDOW_BORDER_WIDTH, () =>
-            this._border?.updateStyle(),
-        );
-    }
-
-    private _turnOff() {
-        this.destroy();
-        this.enable();
-    }
-
-    public destroy(): void {
-        this._signals.disconnect();
-        this._border?.destroy();
-        this._border = null;
-    }
-
-    private _onWindowFocused(): void {
-        // connect signals on the window and create the border
-        const metaWindow = global.display.focus_window;
-
-        if (
-            !metaWindow ||
-            metaWindow.get_wm_class() === null ||
-            metaWindow.get_wm_class() === 'gjs'
-        ) {
-            this._border?.destroy();
-            this._border = null;
-            return;
-        }
-
-        if (!this._border)
-            this._border = new WindowBorder(metaWindow, this._enableScaling);
-        else this._border.trackWindow(metaWindow);
-    }
-}
-
-/*
-If in the future we want to have MULTIPLE borders visible AT THE SAME TIME,
-when the windows are restacked we have to restack the borders as well.
-
-display.connect('restacked', (display) => {
-    let wg = Meta.get_window_group_for_display(display); // From GNOME 48 use Meta.Compositor.get_window_group
-    forEachWindowInTheWindowGroup((win) => {
-        winBorder = getWindowBorder(win)
-        winActor = win.get_compositor_private()
-        wg.set_child_above_sibling(winBorder, winActor);
-    });
-});
-*/

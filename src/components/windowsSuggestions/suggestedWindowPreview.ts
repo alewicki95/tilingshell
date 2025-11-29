@@ -22,11 +22,10 @@ const ICON_OVERLAP = 0.7;
 /*
 This class is heavily based on Gnome Shell's WindowPreview class
 */
-@registerGObjectClass
 export default class SuggestedWindowPreview extends Shell.WindowPreview {
-    static metaInfo: GObject.MetaInfo<unknown, unknown, unknown> = {
+    static { registerGObjectClass(this, {
         GTypeName: 'PopupWindowPreview',
-    };
+    })};
 
     private _overlayShown: boolean;
     private _icon: St.Widget;

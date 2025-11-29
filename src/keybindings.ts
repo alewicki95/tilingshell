@@ -21,9 +21,8 @@ export enum FocusSwitchDirection {
     PREV,
 }
 
-@registerGObjectClass
-export default class KeyBindings extends GObject.Object {
-    static metaInfo: GObject.MetaInfo<unknown, unknown, unknown> = {
+class KeyBindings extends GObject.Object {
+    static { registerGObjectClass(this, {
         GTypeName: 'KeyBindings',
         Signals: {
             'move-window': {
@@ -58,7 +57,7 @@ export default class KeyBindings extends GObject.Object {
                 ], // Meta.Display, number, number
             },
         },
-    };
+    })};
 
     private _signals: SignalHandling;
 

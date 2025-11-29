@@ -3,8 +3,9 @@ import { registerGObjectClass } from '../../utils/gjs';
 import { St, Clutter, Mtk } from '../../gi/ext';
 import SnapAssistTile from '../../components/snapassist/snapAssistTile';
 
-@registerGObjectClass
 export default class SnapAssistTileButton extends SnapAssistTile {
+    static { registerGObjectClass(this) }
+    
     private readonly _btn: St.Button;
 
     constructor(params: {

@@ -5,9 +5,8 @@ import Settings from '../../settings/settings';
 import { buildBlurEffect } from '../../utils/gnomesupport';
 import Tile from '../../components/layout/Tile';
 
-@registerGObjectClass
 export default class SelectionTilePreview extends TilePreview {
-    static metaInfo: GObject.MetaInfo<unknown, unknown, unknown> = {
+    static { registerGObjectClass(this, {
         GTypeName: 'SelectionTilePreview',
         Properties: {
             blur: GObject.ParamSpec.boolean(
@@ -18,7 +17,7 @@ export default class SelectionTilePreview extends TilePreview {
                 false,
             ),
         },
-    };
+    })};
 
     private _blur: boolean;
 

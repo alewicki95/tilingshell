@@ -10,9 +10,8 @@ import ExtendedWindow from '../components/tilingsystem/extendedWindow';
 
 const debug = logger('GlobalState');
 
-@registerGObjectClass
 export default class GlobalState extends GObject.Object {
-    static metaInfo: GObject.MetaInfo<unknown, unknown, unknown> = {
+    static { registerGObjectClass(this, {
         GTypeName: 'GlobalState',
         Signals: {
             'layouts-changed': {
@@ -30,7 +29,7 @@ export default class GlobalState extends GObject.Object {
                 100,
             ),
         },
-    };
+    })};
 
     public static SIGNAL_LAYOUTS_CHANGED = 'layouts-changed';
 

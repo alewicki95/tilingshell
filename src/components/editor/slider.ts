@@ -4,16 +4,15 @@ import EditableTilePreview from './editableTilePreview';
 import { getScalingFactorOf } from '../../utils/ui';
 import { getEventCoords } from '../../utils/gnomesupport';
 
-@registerGObjectClass
 export default class Slider extends St.Button {
-    static metaInfo: GObject.MetaInfo<unknown, unknown, unknown> = {
+    static { registerGObjectClass(this, {
         Signals: {
             slide: {
                 param_types: [GObject.TYPE_INT], // movement
             },
         },
         GTypeName: 'Slider',
-    };
+    })};
 
     private readonly _sliderSize: number = 48;
     private readonly _groupId: number;

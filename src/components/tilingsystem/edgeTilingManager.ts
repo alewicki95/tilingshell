@@ -10,9 +10,8 @@ import { registerGObjectClass } from '../../utils/gjs';
 const TOP_EDGE_TILING_OFFSET = 8;
 const QUARTER_PERCENTAGE = 0.5;
 
-@registerGObjectClass
 export default class EdgeTilingManager extends GObject.Object {
-    static metaInfo: GObject.MetaInfo<unknown, unknown, unknown> = {
+    static { registerGObjectClass(this, {
         GTypeName: 'EdgeTilingManager',
         Properties: {
             quarterActivationPercentage: GObject.ParamSpec.uint(
@@ -34,8 +33,8 @@ export default class EdgeTilingManager extends GObject.Object {
                 16,
             ),
         },
-    };
-    
+    })};
+
     private _workArea: Mtk.Rectangle;
     private _quarterActivationPercentage: number;
     private _edgeTilingOffset: number;

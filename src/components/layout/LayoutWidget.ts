@@ -26,10 +26,11 @@ export interface LayoutWidgetConstructorProperties
 // }
 
 // A widget to draw a layout
-@registerGObjectClass
 export default class LayoutWidget<
     TileType extends TilePreview,
 > extends St.Widget {
+    static { registerGObjectClass(this) }
+    
     protected _previews: TileType[];
     protected _containerRect: Mtk.Rectangle;
     protected _layout: Layout;
