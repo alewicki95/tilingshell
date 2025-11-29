@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { GObject } from '../gi/ext';
 
 // Modified from https://github.com/material-shell/material-shell/blob/main/src/utils/gjs.ts
@@ -10,7 +9,7 @@ import { GObject } from '../gi/ext';
 // ```
 export function registerGObjectClass<
     K,
-    T extends { metaInfo?: any; new (...params: any[]): K },
+    T extends { metaInfo?: any; new (..._params: any[]): K },
 >(target: T) {
     // Use only the class's own metaInfo (not inherited)
     const metaInfo = Object.prototype.hasOwnProperty.call(target, 'metaInfo')

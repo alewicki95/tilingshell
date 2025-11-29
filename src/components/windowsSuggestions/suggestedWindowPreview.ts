@@ -10,7 +10,6 @@ import {
     Pango,
     GLib,
 } from '../../gi/ext';
-import { logger } from '../../utils/logger';
 
 const WINDOW_OVERLAY_FADE_TIME = 200;
 
@@ -19,8 +18,6 @@ const WINDOW_ACTIVE_SIZE_INC = 5; // in each direction
 
 const ICON_SIZE = 36;
 const ICON_OVERLAP = 0.7;
-
-const debug = logger('SuggestedWindowPreview');
 
 /*
 This class is heavily based on Gnome Shell's WindowPreview class
@@ -273,7 +270,7 @@ export default class SuggestedWindowPreview extends Shell.WindowPreview {
     }
 
     _updateAttachedDialogs() {
-        const iter = (win) => {
+        const iter = (win: Meta.Window) => {
             const actor = win.get_compositor_private();
 
             if (!actor) return false;
@@ -298,8 +295,8 @@ export default class SuggestedWindowPreview extends Shell.WindowPreview {
 
         const parent = this.get_parent();
         const actualAbove = this._getActualStackAbove();
-        if (actualAbove === null) parent.set_child_below_sibling(this, null);
-        else parent.set_child_above_sibling(this, actualAbove);
+        if (actualAbove === null) parent?.set_child_below_sibling(this, null);
+        else parent?.set_child_above_sibling(this, actualAbove);
     }
 
     _onDestroy() {

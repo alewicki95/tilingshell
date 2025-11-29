@@ -295,7 +295,6 @@ class WindowBorder extends St.Bin {
             }
         }
         // iterate pixels from bottom to top
-        // eslint-disable-next-line prettier/prettier
         for (let i = height - 1; i >= height - this._borderRadiusValue[St.Corner.TOPLEFT] - 2; i--) {
             if (pixels[i * width * 4 + 3] > alphaThreshold) {
                 this._borderRadiusValue[St.Corner.BOTTOMLEFT] = height - i - 1;

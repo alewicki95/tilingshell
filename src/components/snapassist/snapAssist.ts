@@ -264,11 +264,11 @@ class SnapAssistContent extends St.BoxLayout {
 
     public onMovingWindow(
         window: Meta.Window,
-        ease: boolean = false,
         currPointerPos: { x: number; y: number },
+        ease: boolean = false,
     ) {
         const wasEnlarged = this._isEnlarged;
-        this.handleOpening(window, ease, currPointerPos);
+        this.handleOpening(window, currPointerPos, ease);
         if (!this._showing || !this._isEnlarged) {
             if (this._hoveredInfo) this._hoveredInfo[0].set_hover(false);
 
@@ -301,8 +301,8 @@ class SnapAssistContent extends St.BoxLayout {
 
     private handleOpening(
         window: Meta.Window,
-        ease: boolean = false,
         currPointerPos: { x: number; y: number },
+        ease: boolean = false,
     ) {
         if (!this._showing) {
             if (this.get_parent() === global.windowGroup) {
@@ -424,10 +424,10 @@ export default class SnapAssist extends St.Widget {
 
     public onMovingWindow(
         window: Meta.Window,
-        ease: boolean = false,
         currPointerPos: { x: number; y: number },
+        ease: boolean = false,
     ) {
-        this._content.onMovingWindow(window, ease, currPointerPos);
+        this._content.onMovingWindow(window, currPointerPos, ease);
     }
 
     public close(ease: boolean = false) {

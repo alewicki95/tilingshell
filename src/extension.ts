@@ -1,4 +1,4 @@
-// eslint-disable-next-line spaced-comment
+
 /*!
  * Tiling Shell: advanced and modern window management for GNOME
  *

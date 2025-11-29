@@ -35,6 +35,7 @@ export default class EdgeTilingManager extends GObject.Object {
             ),
         },
     };
+    
     private _workArea: Mtk.Rectangle;
     private _quarterActivationPercentage: number;
     private _edgeTilingOffset: number;

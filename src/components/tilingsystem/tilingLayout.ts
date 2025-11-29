@@ -110,7 +110,7 @@ export default class TilingLayout extends LayoutWidget<DynamicTilePreview> {
         this.open();
     }
 
-    public openAbove(window: Meta.Window) {
+    public openAbove(_window: Meta.Window) {
         if (this._showing) return;
 
         global.windowGroup.set_child_above_sibling(this, null);

@@ -1,6 +1,6 @@
 import { St } from '../gi/ext';
 import Indicator from './indicator';
-import { createButton, createIconButton } from './utils';
+import { createButton } from './utils';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import CurrentMenu from './currentMenu';
 import { _ } from '../translations';

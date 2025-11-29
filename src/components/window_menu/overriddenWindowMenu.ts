@@ -61,7 +61,7 @@ export default class OverriddenWindowMenu extends GObject.Object {
     };
 
     private static _instance: OverriddenWindowMenu | null = null;
-    private static _old_buildMenu: ((window: Meta.Window) => void) | null;
+    private static _old_buildMenu: ((_window: Meta.Window) => void) | null;
     private static _enabled: boolean = false;
 
     static get(): OverriddenWindowMenu {
@@ -320,7 +320,7 @@ export default class OverriddenWindowMenu extends GObject.Object {
         });*/
     }
 
-    static connect(key: string, func: (...arg: unknown[]) => void): number {
+    static connect(key: string, func: (..._arg: unknown[]) => void): number {
         return this.get().connect(key, func) || -1;
     }
 

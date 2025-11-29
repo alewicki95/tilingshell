@@ -20,7 +20,6 @@ export default class Slider extends St.Button {
     private readonly _signals: Map<EditableTilePreview, number[]>;
 
     private _dragging: boolean;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private _grab: any;
     private _horizontalDir: boolean;
     private _lastEventCoord: { x: number; y: number } | null;

@@ -31,7 +31,6 @@ export function buildBlurEffect(sigma: number): Shell.BlurEffect {
     return effect;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getEventCoords(event: any): number[] {
     return event.get_coords ? event.get_coords() : [event.x, event.y]; // GNOME 40-44
 }

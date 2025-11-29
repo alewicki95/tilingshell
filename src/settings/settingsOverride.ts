@@ -37,7 +37,6 @@ export default class SettingsOverride {
     }
     */
     private _overriddenKeysToJSON(): string {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const obj: any = {};
         this._overriddenKeys.forEach((override, schemaId) => {
             obj[schemaId] = {};
@@ -52,7 +51,6 @@ export default class SettingsOverride {
         json: string,
     ): Map<string, Map<string, GLib.Variant>> {
         const result: Map<string, Map<string, GLib.Variant>> = new Map();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const obj: any = JSON.parse(json);
 
         for (const schemaId in obj) {

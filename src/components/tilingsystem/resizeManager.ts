@@ -231,7 +231,7 @@ export class ResizingManager {
         const newRemainingWindows: Set<Meta.Window> = new Set();
         remainingWindows.forEach((otherWin) => {
             const otherWinRect = otherWin.get_frame_rect();
-            // eslint-disable-next-line prefer-const
+             
             let [hasIntersection, intersection] = otherWin
                 .get_frame_rect()
                 .intersect(borderRect);

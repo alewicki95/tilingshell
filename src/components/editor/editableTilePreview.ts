@@ -16,6 +16,7 @@ export default class EditableTilePreview extends TilePreview {
         },
         GTypeName: 'EditableTilePreview',
     };
+
     public static MIN_TILE_SIZE: number = 140;
 
     private readonly _btn: St.Button;
@@ -144,24 +145,10 @@ export default class EditableTilePreview extends TilePreview {
         this.emit('size-changed', oldSize, newSize);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    public connect(id: string, callback: (...args: any[]) => any): number;
-    public connect(
-        signal: 'size-changed',
-        callback: (
-            _source: this,
-            oldSize: Mtk.Rectangle,
-            newSize: Mtk.Rectangle,
-        ) => void,
-    ): number;
-    public connect(
-        signal: 'notify::hover',
-        callback: (_source: this) => void,
-    ): number;
-    public connect(
-        signal: 'clicked',
-        callback: (_source: this, clicked_button: number) => void,
-    ): number;
+    public connect(_id: string, _callback: (..._args: any[]) => any): number;
+    public connect(_signal: 'size-changed', _callback: (_source: this, _oldSize: Mtk.Rectangle, _newSize: Mtk.Rectangle) => void): number;
+    public connect(_signal: 'notify::hover', _callback: (_source: this) => void): number;
+    public connect(_signal: 'clicked', _callback: (_source: this, _clicked_button: number) => void): number;
     public connect(signal: string, callback: never): number {
         if (
             signal === 'clicked' ||

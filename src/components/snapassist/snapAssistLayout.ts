@@ -53,5 +53,7 @@ export default class SnapAssistLayout extends LayoutWidget<SnapAssistTile> {
                 cursorPos.y <= pos.y + preview.rect.height;
             if (isHovering) return preview;
         }
+
+        return undefined;
     }
 }

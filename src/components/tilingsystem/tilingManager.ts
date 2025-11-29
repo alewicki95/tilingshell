@@ -77,7 +77,7 @@ export class TilingManager {
     private _movingWindowTimerId: number | null = null;
 
     private readonly _signals: SignalHandling;
-    private readonly _debug: (...content: unknown[]) => void;
+    private readonly _debug: (..._content: unknown[]) => void;
 
     /**
      * Constructs a new TilingManager instance.
@@ -716,8 +716,8 @@ export class TilingManager {
                 if (Settings.SNAP_ASSIST) {
                     this._snapAssist.onMovingWindow(
                         window,
-                        true,
                         currPointerPos,
+                        true,
                     );
                 }
             }

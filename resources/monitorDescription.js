@@ -1,5 +1,3 @@
-#!@GJS@ -m
-
 import Gtk from "gi://Gtk";
 import Gdk from "gi://Gdk";
 //const { Gtk, Gdk } = imports.gi;

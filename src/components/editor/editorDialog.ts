@@ -25,8 +25,8 @@ export default class EditorDialog extends ModalDialog.ModalDialog {
 
     constructor(params: {
         enableScaling: boolean;
-        onDeleteLayout: (ind: number, lay: Layout) => void;
-        onSelectLayout: (ind: number, lay: Layout) => void;
+        onDeleteLayout: (_ind: number, _lay: Layout) => void;
+        onSelectLayout: (_ind: number, _lay: Layout) => void;
         onNewLayout: () => void;
         legend: boolean;
         onClose: () => void;
@@ -228,8 +228,8 @@ export default class EditorDialog extends ModalDialog.ModalDialog {
 
     private _drawLayouts(params: {
         layouts: Layout[];
-        onDeleteLayout: (ind: number, lay: Layout) => void;
-        onSelectLayout: (ind: number, lay: Layout) => void;
+        onDeleteLayout: (_ind: number, _lay: Layout) => void;
+        onSelectLayout: (_ind: number, _lay: Layout) => void;
         onNewLayout: () => void;
         onClose: () => void;
         path: string;

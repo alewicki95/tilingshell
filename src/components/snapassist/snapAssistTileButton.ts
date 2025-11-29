@@ -40,12 +40,8 @@ export default class SnapAssistTileButton extends SnapAssistTile {
         this._btn.set_checked(newVal);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    public connect(id: string, callback: (...args: any[]) => any): number;
-    public connect(
-        signal: 'clicked',
-        callback: (_source: this, clicked_button: number) => void,
-    ): number;
+    public connect(_id: string, _callback: (..._args: any[]) => any): number;
+    public connect(_signal: 'clicked', _callback: (_source: this, _clicked_button: number) => void): number;
     public connect(signal: string, callback: never): number {
         if (signal === 'clicked') return this._btn.connect(signal, callback);
 

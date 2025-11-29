@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Meta } from '../../gi/ext';
 
 /**
@@ -29,6 +28,7 @@ export default class MetaWindowGroup {
             }),
         );
 
+        // eslint-disable-next-line no-constructor-return
         return new Proxy(this, {
             get: (target, prop, receiver) => {
                 // If the property exists in WindowsGroup itself, return it
@@ -41,7 +41,6 @@ export default class MetaWindowGroup {
                         // Execute the method on each window in the group
                         this._windows.forEach((win) =>
                             // @ts-expect-error "This is expected"
-                            // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
                             (win[prop] as Function)(...args),
                         );
                     };
@@ -72,7 +71,6 @@ export default class MetaWindowGroup {
     }
 
     public connectObject(...args: any[]) {
-        // @ts-expect-error "This is expected"
         return this._windows[0].connectObject(...args);
     }
 

@@ -1,9 +1,6 @@
 import { registerGObjectClass } from '../../utils/gjs';
-import { logger } from '../../utils/logger';
 import SignalHandling from '../../utils/signalHandling';
 import { GObject, Meta, Mtk, Clutter, Graphene } from '../../gi/ext';
-
-const debug = logger('TilingShellWindowManager');
 
 class CachedWindowProperties {
     private _is_initialized: boolean = false;
