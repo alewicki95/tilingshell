@@ -8,7 +8,7 @@ import Tile from '../../components/layout/Tile';
 
 export default class LayoutTileButtons extends LayoutWidget<SnapAssistTileButton> {
     static { registerGObjectClass(this) }
-    
+
     constructor(
         parent: Clutter.Actor,
         layout: Layout,
@@ -63,13 +63,13 @@ export default class LayoutTileButtons extends LayoutWidget<SnapAssistTileButton
 
             if (newX || newY) {
                 prev.open(
-                    false,
                     buildRectangle({
                         x: newX ?? prev.rect.x,
                         y: newY ?? prev.rect.y,
                         width: prev.rect.width,
                         height: prev.rect.height,
                     }),
+                    false
                 );
             }
             xMap.set(

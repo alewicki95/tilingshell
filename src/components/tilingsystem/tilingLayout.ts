@@ -42,7 +42,7 @@ class DynamicTilePreview extends TilePreview {
         if (!this._canRestore) return false;
 
         this._rect = this._originalRect.copy();
-        if (this.showing) this.open(ease);
+        if (this.showing) this.open(undefined, ease);
 
         return true;
     }
@@ -55,7 +55,7 @@ class DynamicTilePreview extends TilePreview {
  */
 export default class TilingLayout extends LayoutWidget<DynamicTilePreview> {
     static { registerGObjectClass(this) }
-    
+
     private _showing: boolean;
 
     constructor(
@@ -187,7 +187,7 @@ export default class TilingLayout extends LayoutWidget<DynamicTilePreview> {
         this._previews.forEach((preview) => {
             if (preview.restore(true)) {
                 newPreviewsArray.push(preview);
-                preview.open(true);
+                preview.open(undefined, true);
             } else {
                 this.remove_child(preview);
                 preview.destroy();
@@ -238,12 +238,12 @@ export default class TilingLayout extends LayoutWidget<DynamicTilePreview> {
                         newPreviewsArray.push(innerPreview);
                     }
                     preview.open(
-                        false,
                         rectangles[maxIndex].union(
                             preview.rect.intersect(rect)[1],
                         ),
+                        false
                     );
-                    preview.open(true, rectangles[maxIndex]);
+                    preview.open(rectangles[maxIndex], true);
                     newPreviewsArray.push(preview);
                 } else {
                     preview.close();
@@ -251,14 +251,14 @@ export default class TilingLayout extends LayoutWidget<DynamicTilePreview> {
                 }
             } else if (reset /* && !preview.originalRect.intersect(rect)[0]*/) {
                 if (preview.restore(true)) {
-                    preview.open(true);
+                    preview.open(undefined, true);
                     newPreviewsArray.push(preview);
                 } else {
                     this.remove_child(preview);
                     preview.destroy();
                 }
             } else {
-                preview.open(true);
+                preview.open(undefined, true);
                 newPreviewsArray.push(preview);
             }
         });

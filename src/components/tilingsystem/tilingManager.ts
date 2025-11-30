@@ -1086,8 +1086,8 @@ export class TilingManager {
             );
         }
         if (window)
-            this._selectedTilesPreview.openAbove(window, ease, position);
-        else this._selectedTilesPreview.open(ease, position);
+            this._selectedTilesPreview.openAbove(window, position, ease);
+        else this._selectedTilesPreview.open(position, ease);
     }
 
     /**
@@ -1138,7 +1138,7 @@ export class TilingManager {
             });
             initialRect.x -= initialRect.width / 2;
             initialRect.y -= initialRect.height / 2;
-            this._selectedTilesPreview.open(false, initialRect);
+            this._selectedTilesPreview.open(initialRect, false);
         }
 
         this.openSelectionTilePreview(edgeTile, false, true, window);
