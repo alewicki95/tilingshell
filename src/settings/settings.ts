@@ -509,8 +509,7 @@ export default class Settings {
             if (layouts.length === 0)
                 throw new Error('At least one layout is required');
             return layouts.filter((layout) => layout.tiles.length > 0);
-        // eslint-disable-next-line no-unused-vars
-        } catch (_ex: unknown) {
+        } catch (_unused) {
             this.reset_layouts_json();
             return JSON.parse(
                 this._settings?.get_string(this.KEY_SETTING_LAYOUTS_JSON) ||

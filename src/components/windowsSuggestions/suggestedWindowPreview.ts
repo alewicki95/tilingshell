@@ -1,6 +1,5 @@
 import { registerGObjectClass } from '../../utils/gjs';
 import {
-    GObject,
     Clutter,
     Shell,
     Meta,
@@ -307,12 +306,12 @@ export default class SuggestedWindowPreview extends Shell.WindowPreview {
         }
     }
 
-    vfunc_enter_event(event) {
+    vfunc_enter_event(event: Clutter.Event) {
         this.showOverlay(true);
         return super.vfunc_enter_event(event);
     }
 
-    vfunc_leave_event(event) {
+    vfunc_leave_event(event: Clutter.Event) {
         if (this._destroyed) return super.vfunc_leave_event(event);
 
         /* if ((event.get_flags() & Clutter.EventFlags.FLAG_GRAB_NOTIFY) !== 0 &&

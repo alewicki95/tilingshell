@@ -16,7 +16,7 @@ const rules = {
     'array-callback-return': 'error',
     'no-await-in-loop': 'error',
     'no-constant-binary-expression': 'error',
-    'no-constructor-return': 'error',
+    'no-constructor-return': 'off',
     'no-new-native-nonconstructor': 'error',
     'no-promise-executor-return': 'error',
     'no-self-compare': 'error',
@@ -52,13 +52,7 @@ const rules = {
     'no-new-wrappers': 'error',
     'no-proto': 'error',
     'no-shadow': 'warn',
-    'no-unused-vars': [
-        'error',
-        {
-            varsIgnorePattern: '^_',
-            argsIgnorePattern: '^_',
-        },
-    ],
+    'no-unused-vars': 'off',
     //'no-var': 'warn',
     'unicode-bom': 'error',
     // GJS Restrictions
@@ -163,6 +157,33 @@ export default [
         files: ["**/*.ts"],
         languageOptions: {
             parser: tsParser,
+            globals: {
+                ARGV: 'readonly',
+                Debugger: 'readonly',
+                GIRepositoryGType: 'readonly',
+                globalThis: 'readonly',
+                imports: 'readonly',
+                Intl: 'readonly',
+                log: 'readonly',
+                logError: 'readonly',
+                pkg: 'readonly',
+                print: 'readonly',
+                printerr: 'readonly',
+                window: 'readonly',
+                TextEncoder: 'readonly',
+                TextDecoder: 'readonly',
+                console: 'readonly',
+                setTimeout: 'readonly',
+                setInterval: 'readonly',
+                clearTimeout: 'readonly',
+                clearInterval: 'readonly',
+                // GNOME Shell Only
+                global: 'readonly',
+                _: 'readonly',
+                C_: 'readonly',
+                N_: 'readonly',
+                ngettext: 'readonly',
+            },
             parserOptions: {
                 ecmaVersion: 2022,
                 sourceType: "module",
@@ -171,8 +192,18 @@ export default [
         plugins:  {
             "@typescript-eslint": tsPlugin,
         },
-        // keep parity with JS
-        rules: rules,
+        // keep parity with JS plus some more rules
+        rules: {
+            ...rules,
+            "@typescript-eslint/no-unused-vars": [
+                'error',
+                {
+                    varsIgnorePattern: '^_',
+                    argsIgnorePattern: '^_',
+                    caughtErrorsIgnorePattern: "^_"
+                },
+            ],
+        },
     },
     eslintConfigPrettier
 ];

@@ -28,7 +28,6 @@ export default class MetaWindowGroup {
             }),
         );
 
-        // eslint-disable-next-line no-constructor-return
         return new Proxy(this, {
             get: (target, prop, receiver) => {
                 // If the property exists in WindowsGroup itself, return it

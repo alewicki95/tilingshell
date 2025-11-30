@@ -105,7 +105,7 @@ export default class TilePreview extends St.Widget {
         return this._showing;
     }
 
-    public open(ease: boolean = false, position?: Mtk.Rectangle) {
+    public open(position?: Mtk.Rectangle, ease: boolean = false) {
         if (position) this._rect = position;
 
         const fadeInMove = this._showing;
@@ -134,8 +134,8 @@ export default class TilePreview extends St.Widget {
 
     public openBelow(
         window: Meta.Window,
-        ease: boolean = false,
         position?: Mtk.Rectangle,
+        ease: boolean = false,
     ) {
         if (this.get_parent() === global.windowGroup) {
             const windowActor =
@@ -144,13 +144,13 @@ export default class TilePreview extends St.Widget {
             global.windowGroup.set_child_below_sibling(this, windowActor);
         }
 
-        this.open(ease, position);
+        this.open(position, ease);
     }
 
     public openAbove(
         window: Meta.Window,
-        ease: boolean = false,
         position?: Mtk.Rectangle,
+        ease: boolean = false,
     ) {
         if (this.get_parent() === global.windowGroup) {
             /* const windowActor =
@@ -159,7 +159,7 @@ export default class TilePreview extends St.Widget {
             global.windowGroup.set_child_above_sibling(this, null);
         }
 
-        this.open(ease, position);
+        this.open(position, ease);
     }
 
     public close(ease: boolean = false) {

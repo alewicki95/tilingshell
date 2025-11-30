@@ -8,6 +8,7 @@ import parser from '@babel/parser';
 import types from '@babel/types';
 import traverseBabel from '@babel/traverse';
 import generatorBabel from '@babel/generator';
+import { ESLint } from "eslint";
 
 const traverse = traverseBabel.default;
 const generator = generatorBabel.default;
@@ -77,8 +78,11 @@ function fillPreferencesWindow(window) {
 `;
 
 async function preprocess(files) {
-    await Promise.all(files.map(async (file) => {
-        let text = fsSync.readFileSync(file, 'utf-8');
+    const eslint = new ESLint({
+        fix: true,
+    });
+    await Promise.all(files.map(async (filename) => {
+        let text = fsSync.readFileSync(filename, 'utf-8');
 
         // drop lines tagged with "// @esbuild-drop-next-line"
         text = text.replace(/\/\/\s*@esbuild-drop-next-line\s*\n.*?;/gs, '');
@@ -94,7 +98,22 @@ async function preprocess(files) {
             }
         );
 
-        fsSync.writeFileSync(file, text, 'utf-8');
+        // Run ESLint on the file
+        const lintResults = await eslint.lintText(text, { filePath: filename });
+        text = lintResults.length > 0 ? lintResults[0].output || text : text;
+
+        // Check if there are remaining errors
+        const hasErrors = lintResults.some((r) =>
+            r.messages.some((m) => m.severity === 2),
+        );
+
+        if (hasErrors) {
+            const formatter = await eslint.loadFormatter("stylish");
+            const output = formatter.format(lintResults);
+            console.error(output);
+        }
+
+        fsSync.writeFileSync(filename, text, 'utf-8');
     }));
 }
 

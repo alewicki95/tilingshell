@@ -164,7 +164,7 @@ export default class GlobalState extends GObject.Object {
         this._signals.connect(
             global.workspaceManager,
             'workspace-removed',
-            (_) => {
+            () => {
                 const newMap: Map<Meta.Workspace, string[]> = new Map();
                 const n_workspaces = global.workspaceManager.get_n_workspaces();
                 const to_be_saved: string[][] = [];
@@ -190,7 +190,7 @@ export default class GlobalState extends GObject.Object {
         this._signals.connect(
             global.workspaceManager,
             'workspaces-reordered',
-            (_) => {
+            () => {
                 this._save_selected_layouts();
                 debug('reordered workspaces');
             },

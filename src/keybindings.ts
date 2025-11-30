@@ -21,7 +21,7 @@ export enum FocusSwitchDirection {
     PREV,
 }
 
-class KeyBindings extends GObject.Object {
+export default class KeyBindings extends GObject.Object {
     static { registerGObjectClass(this, {
         GTypeName: 'KeyBindings',
         Signals: {

@@ -62,7 +62,7 @@ export default class TilingShellExtension extends Extension {
     private _keybindings: KeyBindings | null;
     private _resizingManager: ResizingManager | null;
     private _windowBorderManager: WindowBorderManager | null;
-
+    
     constructor(metadata: ExtensionMetadata) {
         super(metadata);
         this._signals = null;
