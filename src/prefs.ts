@@ -20,7 +20,8 @@
  */
 
 import { Gtk, Adw, Gio, GLib, Gdk, GObject } from './gi/prefs';
-import Settings, { ActivationKey } from './settings/settings';
+import Settings from './settings/settings';
+import { ActivationKey } from './settings/settings';
 import { logger } from './utils/logger';
 import { ExtensionPreferences } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 import Layout from './components/layout/Layout';
