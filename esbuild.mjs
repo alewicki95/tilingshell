@@ -54,6 +54,7 @@ function init(meta) {
 `;
 
 const prefsBanner = `// For GNOME Shell version before 45
+const Me = imports.misc.extensionUtils.getCurrentExtension();
 class ExtensionPreferences {
     constructor(metadata) {
         this.metadata = metadata;
