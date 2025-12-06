@@ -70,7 +70,6 @@ export class WindowBorderManager {
     private _onWindowFocused(): void {
         // connect signals on the window and create the border
         const metaWindow = global.display.focus_window;
-
         if (
             !metaWindow ||
             metaWindow.get_wm_class() === null ||
