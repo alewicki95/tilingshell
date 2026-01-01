@@ -276,8 +276,10 @@ async function processLegacyFiles(files) {
             finalContent = `${polyfillBanner}${convertedContent}`;
         } else if (filePath.includes("prefs.js")) {
             finalContent = `${prefsBanner}${convertedContent}${prefsFooter}`;
-        } else {
+        } else if (!filePath.includes("monitorDescription.js")) { // add global banner to everyfile but not to monitorDescription.js
             finalContent = `${globalBanner}${convertedContent}`;
+        } else {
+            finalContent = convertedContent;
         }
 
         await fs.writeFile(filePath, finalContent, 'utf-8');
@@ -296,7 +298,10 @@ build({
     format: 'esm',
     plugins: [sassPlugin()],
 }).then(async () => {
-    // --- Post-build sync steps
+    const excludedFiles = ['./ambient.d.js']; // paths relative to dist directory
+    excludedFiles.forEach(file => fsSync.unlinkSync(path.resolve(distDir, file)));
+
+    // Post-build sync steps
     fsSync.renameSync(path.resolve(distDir, "styles/stylesheet.css"), path.resolve(distDir, "stylesheet.css"));
     fsSync.cpSync(resourcesDir, distDir, { recursive: true });
 
