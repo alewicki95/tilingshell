@@ -312,7 +312,9 @@ build({
     plugins: [sassPlugin()],
 }).then(async () => {
     const excludedFiles = ['./ambient.d.js']; // paths relative to dist directory
-    excludedFiles.forEach(file => fsSync.unlinkSync(path.resolve(distDir, file)));
+    excludedFiles.forEach(file => {
+        fsSync.rmSync(path.resolve(distDir, file), { recursive: true, force: true });
+    });
 
     // Post-build sync steps
     fsSync.renameSync(path.resolve(distDir, "styles/stylesheet.css"), path.resolve(distDir, "stylesheet.css"));
