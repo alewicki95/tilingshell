@@ -240,10 +240,23 @@ function convertImports(text, currentFilePath, rootDirName) {
 
             // top-level class → var = class ...
             if (path.isClassDeclaration() && path.parent.type === 'Program') {
-                const { id, superClass, body } = path.node;
-                path.replaceWith(types.variableDeclaration('var', [
-                    types.variableDeclarator(id, types.classExpression(id, superClass, body, []))
-                ]));
+                path.node.type = 'VariableDeclaration';
+                path.node.kind = 'var';
+                path.node.declarations = [
+                    types.variableDeclarator(
+                        path.node.id,
+                        types.classExpression(
+                            path.node.id,
+                            path.node.superClass,
+                            path.node.body,
+                            []
+                        )
+                    )
+                ];
+
+                delete path.node.id;
+                delete path.node.superClass;
+                delete path.node.body;
             }
 
             // remove exports

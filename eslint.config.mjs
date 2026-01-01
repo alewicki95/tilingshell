@@ -10,6 +10,10 @@ const rules = {
         { "blankLine": "always", "prev": "function", "next": "function" },
         // Require empty line before any function
         { "blankLine": "always", "prev": "*", "next": "function" },
+        // Require empty line before class declarations
+        { blankLine: "always", prev: "*", next: "class" },
+        // Require empty line after class declarations
+        { blankLine: "always", prev: "class", next: "*" },
     ],
     // Require empty line before class methods
     'lines-between-class-members': ['error', 'always', { 'exceptAfterSingleLine': true }],
