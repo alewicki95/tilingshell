@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-09 11:35+0100\n"
-"PO-Revision-Date: 2025-04-03 18:17+0800\n"
-"Last-Translator: taijuin <taijuin@gmail.com>\n"
+"PO-Revision-Date: 2025-12-01 01:58+0800\n"
+"Last-Translator: taijuin\n"
 "Language-Team: \n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.8\n"
 
 #: dist/prefs.js:793
 msgid "General"
@@ -227,13 +227,13 @@ msgstr ""
 
 #: dist/prefs.js:994
 msgid "Add tiled windows to ALT+TAB menu"
-msgstr ""
+msgstr "在 ALT+TAB 選單中新增平鋪的視窗"
 
 #: dist/prefs.js:996
 msgid ""
 "Add the tiled windows to the ALT+TAB menu to open all the tiled windows at "
 "once"
-msgstr ""
+msgstr "將平鋪的視窗新增至 ALT+TAB 選單，即可同時開啟所有平鋪的視窗"
 
 #: dist/prefs.js:1001
 msgid "Screen Edges"
@@ -263,11 +263,11 @@ msgstr "觸發四分之一平鋪的啟動區域（佔螢幕百分比）"
 
 #: dist/prefs.js:1044
 msgid "Edge tiling offset"
-msgstr ""
+msgstr "邊緣平鋪偏移量"
 
 #: dist/prefs.js:1045
 msgid "Offset from the screen edge to trigger edge tiling (in pixels)"
-msgstr ""
+msgstr "從螢幕邊緣到觸發邊緣的偏移量（以像素為單位）"
 
 #: dist/prefs.js:1062
 msgid "Windows suggestions"
@@ -373,7 +373,7 @@ msgstr "將視窗移到右側區塊"
 
 #: dist/prefs.js:1251
 msgid "Move the focused window to the tile on its right"
-msgstr "將聚焦的視窗移至其右側的區塊上"
+msgstr "將聚焦的視窗移至其右側的區塊"
 
 #: dist/prefs.js:1260
 msgid "Move window to left tile"
@@ -381,7 +381,7 @@ msgstr "將視窗移到左側區塊"
 
 #: dist/prefs.js:1261
 msgid "Move the focused window to the tile on its left"
-msgstr "將對焦的視窗移至其左側的區塊上"
+msgstr "將對焦的視窗移至其左側的區塊"
 
 #: dist/prefs.js:1267
 msgid "Move window to tile above"
@@ -389,7 +389,7 @@ msgstr "將視窗移到上方區塊"
 
 #: dist/prefs.js:1268
 msgid "Move the focused window to the tile above"
-msgstr "將聚焦的視窗移至其上方的區塊上"
+msgstr "將聚焦的視窗移至其上方的區塊"
 
 #: dist/prefs.js:1274
 msgid "Move window to tile below"
@@ -397,7 +397,7 @@ msgstr "將視窗移到下方區塊"
 
 #: dist/prefs.js:1275
 msgid "Move the focused window to the tile below"
-msgstr "將聚焦的視窗移至其下方的區塊上"
+msgstr "將聚焦的視窗移至其下方的區塊"
 
 #: dist/prefs.js:1281
 msgid "Span window to right tile"
@@ -508,13 +508,12 @@ msgid "Minimize all the other windows and show only the focused window"
 msgstr "最小化所有其他視窗，只顯示焦點視窗"
 
 #: dist/prefs.js:1388
-#, fuzzy
 msgid "Cycle layouts"
-msgstr "重設版面配置"
+msgstr "循環版面配置"
 
 #: dist/prefs.js:1389
 msgid "Cycle through available workspace layouts"
-msgstr ""
+msgstr "循環切換可用工作區版面配置"
 
 #: dist/prefs.js:1415
 msgid "View and Customize all the Shortcuts"
@@ -534,11 +533,11 @@ msgstr "對焦下一個或上一個視窗時，環繞視窗邊緣"
 
 #: dist/prefs.js:1474
 msgid "Restrict directional focus to tiled windows"
-msgstr ""
+msgstr "將方向性聚焦限制於平鋪的視窗"
 
 #: dist/prefs.js:1476
 msgid "When using directional focus navigation, only consider tiled windows"
-msgstr ""
+msgstr "使用方向性焦點導航時，僅考慮平鋪的視窗"
 
 #: dist/prefs.js:1481
 msgid "Import, export and reset"
@@ -606,11 +605,11 @@ msgstr "開啟一個新的議題"
 
 #: dist/prefs.js:1814
 msgid "Choose custom color"
-msgstr ""
+msgstr "選擇自訂顏色"
 
 #: dist/prefs.js:1815
 msgid "Use system accent color"
-msgstr ""
+msgstr "使用系統強調色"
 
 #: dist/prefs.js:1866 dist/prefs.js:1889
 msgid "New accelerator…"
