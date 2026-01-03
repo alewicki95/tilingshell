@@ -3,7 +3,7 @@ import {
     isPointInsideRect,
     clampPointInsideRect,
 } from '../../utils/ui';
-import { GObject, Mtk } from '../../gi/ext';
+import { GObject, Mtk, St } from '../../gi/ext';
 import Settings from '../../settings/settings';
 import { EdgeSnapMode } from '../../settings/settings';
 import { registerGObjectClass } from '../../utils/gjs';
@@ -12,7 +12,6 @@ import Layout from '../layout/Layout';
 import GlobalState from '../../utils/globalState';
 import Tile from '../../components/layout/Tile';
 
-const EDGE_TILING_OFFSET = 16;
 const TOP_EDGE_TILING_OFFSET = 8;
 const QUARTER_PERCENTAGE = 0.5;
 const __DEBUG_MODE__ = false;
@@ -49,7 +48,6 @@ export default class EdgeTilingManager extends GObject.Object {
     private _monitorIndex: number = 0;
     private _workspaceIndex: number = 0;
     private _debug: (...args: unknown[]) => void;
-    private _edgeTilingOffset: number;
 
     // activation zones
     private _topLeft: Mtk.Rectangle;
