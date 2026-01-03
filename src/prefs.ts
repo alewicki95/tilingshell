@@ -31,9 +31,28 @@ import { gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensio
 import * as Config from 'resource:///org/gnome/Shell/Extensions/js/misc/config.js';
 
 const debug = logger('prefs');
+const RESOURCES_PREFIX = "/org/gnome/Shell/Extensions/tilingshell"; // must match the prefix in resources.gresources.xml
 
 export default class TilingShellExtensionPreferences extends ExtensionPreferences {
     private GNOME_VERSION_MAJOR = Number(Config.PACKAGE_VERSION.split('.')[0]);
+
+    loadCssAndResources() {
+        const resource = Gio.Resource.load(`${this.path}/resources.gresource`);
+        Gio.resources_register(resource);
+
+        const provider = new Gtk.CssProvider();
+        provider.load_from_path(`${this.path}/prefs.css`);
+
+        Gtk.StyleContext.add_provider_for_display(
+            Gdk.Display.get_default(),
+            provider,
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+        );
+
+        Gtk.IconTheme
+            .get_for_display(Gdk.Display.get_default())
+            .add_resource_path(`${RESOURCES_PREFIX}/icons`);
+    }
 
     /**
      * This function is called when the preferences window is first created to fill
@@ -43,6 +62,7 @@ export default class TilingShellExtensionPreferences extends ExtensionPreference
      */
     fillPreferencesWindow(window: Adw.PreferencesWindow): Promise<void> {
         Settings.initialize(this.getSettings());
+        this.loadCssAndResources();
 
         const prefsPage = new Adw.PreferencesPage({
             name: 'general',
@@ -64,7 +84,6 @@ export default class TilingShellExtensionPreferences extends ExtensionPreference
             _('Whether to show the panel indicator'),
         );
         appearenceGroup.add(showIndicatorRow);
-
         const innerGapsRow = this._buildSpinButtonRow(
             Settings.KEY_INNER_GAPS,
             _('Inner gaps'),
@@ -343,6 +362,8 @@ export default class TilingShellExtensionPreferences extends ExtensionPreference
         );
         activeScreenEdgesGroup.add(edgeTilingOffset);
 
+        // const edgeTilingBehaviourRow = this._buildEdgeTilingBehaviourRow();
+        // activeScreenEdgesGroup.add(edgeTilingBehaviourRow);
         prefsPage.add(activeScreenEdgesGroup);
 
         // Windows suggestions section
@@ -983,6 +1004,103 @@ export default class TilingShellExtensionPreferences extends ExtensionPreference
         });
 
         return Promise.resolve();
+    }
+
+    _createEdgeTilingBehaviourOption(title: string, subtitle: string, iconName: string) {
+        const button = new Gtk.ToggleButton({
+            canFocus: true,
+            valign: Gtk.Align.FILL,
+            cssClasses: ['option'],
+            hexpand: true,
+            vexpand: false,
+        });
+
+        const distance = 12;
+
+        const content = new Gtk.Box({
+            orientation: Gtk.Orientation.VERTICAL,
+            margin_top: 0,
+            margin_bottom: distance,
+            margin_start: 0,
+            margin_end: 0,
+        });
+
+        const image = new Gtk.Image({
+            iconName: iconName,
+            pixel_size: 96,
+            margin_top: distance,
+            margin_bottom: distance,
+            margin_start: 0,
+            margin_end: 0,
+        });
+
+        const titleLabel = new Gtk.Label({
+            label: title,
+            wrap: true,
+            xalign: 0,
+            css_classes: ['title']
+        });
+
+        const subtitleLabel = new Gtk.Label({
+            label: subtitle,
+            wrap: true,
+            xalign: 0,
+            css_classes: ['caption']
+        });
+
+        content.append(image);
+        content.append(titleLabel);
+        content.append(subtitleLabel);
+
+        button.set_child(content);
+
+        return button;
+    }
+
+    _buildEdgeTilingBehaviourRow() {
+        const row = new Adw.ActionRow({
+            activatable: false,
+            title: _("Behaviour"),
+            subtitle: _("Choose how windows snap to screen edges"),
+            cssClasses: ['edge-tiling-behaviour']
+        });
+        (row.get_child() as Gtk.Box).set_orientation(Gtk.Orientation.VERTICAL);
+
+        const content = new Gtk.Box({
+            orientation: Gtk.Orientation.HORIZONTAL,
+            halign: Gtk.Align.FILL,
+            valign: Gtk.Align.FILL,
+            homogeneous: true, // all children same size
+            spacing: 2,
+            cssClasses: ['content']
+            //margin_top: 6,
+        });
+        const defaultBtn = this._createEdgeTilingBehaviourOption(
+            _('Default'),
+            _('Snap to quarters and halves'),
+            'edge-default-symbolic'
+        );
+        const adaptiveBtn = this._createEdgeTilingBehaviourOption(
+            _('Adaptive'),
+            _('Snap to corners and columns'),
+            'edge-adaptive-symbolic'
+        );
+        const granularBtn = this._createEdgeTilingBehaviourOption(
+            _('Granular'),
+            _('Snap window to layout tiles'),
+            'edge-granular-symbolic'
+        );
+        content.append(defaultBtn);
+        content.append(adaptiveBtn);
+        content.append(granularBtn);
+        // make them mutually exclusive
+        defaultBtn.set_group(adaptiveBtn);
+        granularBtn.set_group(adaptiveBtn);
+        // set the currently activated one
+        defaultBtn.set_active(true);
+        (row.get_child() as Gtk.Box).append(content);
+
+        return row;
     }
 
     _buildSwitchRow(
