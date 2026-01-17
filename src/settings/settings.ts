@@ -9,7 +9,7 @@ export enum ActivationKey {
     SUPER,
 }
 
-export enum EdgeSnapMode {
+export enum EdgeTilingMode {
     DEFAULT = 'default',
     ADAPTIVE = 'adaptive',
     GRANULAR = 'granular',
@@ -122,7 +122,7 @@ export default class Settings {
     static KEY_ENABLE_TILING_SYSTEM_WINDOWS_SUGGESTIONS = 'enable-tiling-system-windows-suggestions';
     static KEY_ENABLE_SNAP_ASSISTANT_WINDOWS_SUGGESTIONS = 'enable-snap-assistant-windows-suggestions';
     static KEY_ENABLE_SCREEN_EDGES_WINDOWS_SUGGESTIONS = 'enable-screen-edges-windows-suggestions';
-    static KEY_EDGE_SNAP_MODE = 'edge-snap-mode';
+    static KEY_EDGE_TILING_MODE = 'edge-tiling-mode';
 
     static SETTING_MOVE_WINDOW_RIGHT = 'move-window-right';
     static SETTING_MOVE_WINDOW_LEFT = 'move-window-left';
@@ -493,16 +493,16 @@ export default class Settings {
         set_boolean(Settings.KEY_ENABLE_SCREEN_EDGES_WINDOWS_SUGGESTIONS, val);
     }
 
-    static get EDGE_SNAP_MODE(): EdgeSnapMode {
-        const value = get_string(Settings.KEY_EDGE_SNAP_MODE);
-        if (Object.values(EdgeSnapMode).includes(value as EdgeSnapMode))
-            return value as EdgeSnapMode;
+    static get EDGE_TILING_MODE(): EdgeTilingMode {
+        const value = get_string(Settings.KEY_EDGE_TILING_MODE);
+        if (Object.values(EdgeTilingMode).includes(value as EdgeTilingMode))
+            return value as EdgeTilingMode;
 
-        return EdgeSnapMode.DEFAULT;
+        return EdgeTilingMode.DEFAULT;
     }
 
-    static set EDGE_SNAP_MODE(val: EdgeSnapMode) {
-        set_string(Settings.KEY_EDGE_SNAP_MODE, val);
+    static set EDGE_TILING_MODE(val: EdgeTilingMode) {
+        set_string(Settings.KEY_EDGE_TILING_MODE, val);
     }
 
     static get_inner_gaps(scaleFactor: number = 1): {

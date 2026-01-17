@@ -15,7 +15,7 @@ import {
 import TilingLayout from '../../components/tilingsystem/tilingLayout';
 import SnapAssist from '../snapassist/snapAssist';
 import SelectionTilePreview from '../tilepreview/selectionTilePreview';
-import { ActivationKey, EdgeSnapMode } from '../../settings/settings';
+import { ActivationKey, EdgeTilingMode } from '../../settings/settings';
 import Settings from '../../settings/settings';
 import SignalHandling from '../../utils/signalHandling';
 import Layout from '../layout/Layout';
@@ -888,7 +888,7 @@ export class TilingManager {
         // retrieve the current layout for the monitor and workspace
         // were the window was tiled
         const layout = wasEdgeTiling
-            ? (Settings.EDGE_SNAP_MODE === EdgeSnapMode.DEFAULT
+            ? (Settings.EDGE_TILING_MODE === EdgeTilingMode.DEFAULT
                 ? new Layout([
                     new Tile({ x: 0, y: 0, height: 0.5, width: 0.5, groups: []}),
                     new Tile({ x: 0.5, y: 0, height: 0.5, width: 0.5, groups: []}),
