@@ -571,19 +571,19 @@ export class TilingManager {
     ): boolean {
         if (key === ActivationKey.NONE) return true;
 
-        let val = 2;
+        let mask = Clutter.ModifierType.CONTROL_MASK;
         switch (key) {
             case ActivationKey.CTRL:
-                val = 2; // Clutter.ModifierType.CONTROL_MASK
+                mask = Clutter.ModifierType.CONTROL_MASK;
                 break;
             case ActivationKey.ALT:
-                val = 3; // Clutter.ModifierType.MOD1_MASK
+                mask = Clutter.ModifierType.MOD1_MASK;
                 break;
             case ActivationKey.SUPER:
-                val = 6; // Clutter.ModifierType.SUPER_MASK
+                mask = Clutter.ModifierType.SUPER_MASK;
                 break;
         }
-        return (modifier & (1 << val)) !== 0;
+        return (modifier & mask) === mask;
     }
 
     private _onMovingWindow(window: Meta.Window, grabOp: number) {
