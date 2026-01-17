@@ -15,7 +15,7 @@ import {
 import TilingLayout from '../../components/tilingsystem/tilingLayout';
 import SnapAssist from '../snapassist/snapAssist';
 import SelectionTilePreview from '../tilepreview/selectionTilePreview';
-import { ActivationKey } from '../../settings/settings';
+import { ActivationKey, EdgeSnapMode } from '../../settings/settings';
 import Settings from '../../settings/settings';
 import SignalHandling from '../../utils/signalHandling';
 import Layout from '../layout/Layout';
@@ -888,16 +888,23 @@ export class TilingManager {
         // retrieve the current layout for the monitor and workspace
         // were the window was tiled
         const layout = wasEdgeTiling
-            ? GlobalState.get().getSelectedLayoutOfMonitor(
+            ? (Settings.EDGE_SNAP_MODE === EdgeSnapMode.DEFAULT
+                ? new Layout([
+                    new Tile({ x: 0, y: 0, height: 0.5, width: 0.5, groups: []}),
+                    new Tile({ x: 0.5, y: 0, height: 0.5, width: 0.5, groups: []}),
+                    new Tile({ x: 0, y: 0.5, height: 0.5, width: 0.5, groups: []}),
+                    new Tile({ x: 0.5, y: 0.5, height: 0.5, width: 0.5, groups: []})],
+                    "quarters"
+                )
+                : GlobalState.get().getSelectedLayoutOfMonitor(
                   this._monitor.index,
-                  window.get_workspace().index(),
-              )
-            : wasSnapAssistingLayout
+                  window.get_workspace().index())
+            ): (wasSnapAssistingLayout
               ? wasSnapAssistingLayout
               : GlobalState.get().getSelectedLayoutOfMonitor(
                     this._monitor.index,
                     window.get_workspace().index(),
-                );
+                ));
         this._openWindowsSuggestions(
             window,
             desiredWindowRect,
