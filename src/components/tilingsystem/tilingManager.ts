@@ -872,6 +872,14 @@ export class TilingManager {
         });
         this._easeWindowRect(window, desiredWindowRect);
 
+        // Sync the desktop layout to match the snap-assisted layout if enabled
+        if (wasSnapAssistingLayout && Settings.SNAP_ASSIST_SYNC_LAYOUT) {
+            GlobalState.get().setSelectedLayoutOfMonitor(
+                wasSnapAssistingLayout.id,
+                this._monitor.index,
+            );
+        }
+
         if (!tilingLayout || !canShowTilingSuggestions) return;
 
         // retrieve the current layout for the monitor and workspace
