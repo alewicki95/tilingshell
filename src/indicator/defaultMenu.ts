@@ -21,8 +21,11 @@ import { _ } from '../translations';
 import { openPrefs } from '../polyfill';
 import { widgetOrientation } from '../utils/gnomesupport';
 import { createButton, createIconButton } from './utils';
+// @ts-expect-error "Module exists"
+import * as Config from 'resource:///org/gnome/shell/misc/config.js';
 
 const debug = logger('DefaultMenu');
+const GNOME_VERSION_MAJOR = Number(Config.PACKAGE_VERSION.split('.')[0]);
 
 class LayoutsRow extends St.BoxLayout {
     static { registerGObjectClass(this, {
@@ -108,20 +111,40 @@ class LayoutsRow extends St.BoxLayout {
         showMonitorName: boolean,
         monitorsDetails: {
             name: string;
-            x: number;
-            y: number;
-            height: number;
-            width: number;
+            index?: number;
+            x?: number;
+            y?: number;
+            height?: number;
+            width?: number;
         }[],
     ) {
         if (!showMonitorName) this._label.hide();
         else this._label.show();
 
-        const details = monitorsDetails.find(
-            (m) => m.x === this._monitor.x && m.y === this._monitor.y,
-        );
-        if (!details) return;
+        debug(`updateMonitorName: monitor=${this._monitor.index}, x=${this._monitor.x}, y=${this._monitor.y}`);
+        debug(`updateMonitorName: monitorsDetails=${JSON.stringify(monitorsDetails)}`);
 
+        // Try to match by index first, then fall back to coordinates
+        let details = monitorsDetails.find(
+            (m) => m.index === this._monitor.index,
+        );
+        if (details) {
+            debug(`updateMonitorName: matched by index ${this._monitor.index}`);
+        }
+        if (!details) {
+            details = monitorsDetails.find(
+                (m) => m.x === this._monitor.x && m.y === this._monitor.y,
+            );
+            if (details) {
+                debug(`updateMonitorName: matched by coordinates (${this._monitor.x}, ${this._monitor.y})`);
+            }
+        }
+        if (!details) {
+            debug(`updateMonitorName: no match found for monitor ${this._monitor.index}`);
+            return;
+        }
+
+        debug(`updateMonitorName: setting label to "${details.name}"`);
         this._label.set_text(details.name);
     }
 }
@@ -251,11 +274,57 @@ export default class DefaultMenu implements CurrentMenu {
 
     // compute monitors details and update labels asynchronously (if we have successful results...)
     private _computeMonitorsDetails() {
+        debug(`_computeMonitorsDetails: GNOME_VERSION_MAJOR=${GNOME_VERSION_MAJOR}, monitors=${getMonitors().length}`);
+
         if (getMonitors().length === 1) {
+            debug('_computeMonitorsDetails: single monitor, skipping name detection');
             this._layoutsRows.forEach((lr) => lr.updateMonitorName(false, []));
             return;
         }
 
+        // GNOME 49+ has Meta.Monitor with get_display_name()
+        if (GNOME_VERSION_MAJOR >= 49) {
+            debug('_computeMonitorsDetails: using native GNOME 49+ API');
+            try {
+                const monitorManager = global.backend.get_monitor_manager();
+                const logicalMonitors = monitorManager.get_logical_monitors();
+                const monitorsDetails: {
+                    name: string;
+                    index: number;
+                    x: number;
+                    y: number;
+                }[] = [];
+
+                for (const logicalMonitor of logicalMonitors) {
+                    // Get the primary (first) physical monitor for this logical monitor
+                    const metaMonitors = logicalMonitor.get_monitors();
+                    if (metaMonitors.length > 0) {
+                        const metaMonitor = metaMonitors[0];
+                        // MetaLogicalMonitor has x, y as direct properties
+                        const x = (logicalMonitor as any).x ?? 0;
+                        const y = (logicalMonitor as any).y ?? 0;
+                        debug(`_computeMonitorsDetails: logicalMonitor props: index=${logicalMonitor.get_number()}, x=${x}, y=${y}`);
+                        monitorsDetails.push({
+                            name: metaMonitor.get_display_name(),
+                            index: logicalMonitor.get_number(),
+                            x,
+                            y,
+                        });
+                    }
+                }
+
+                debug('monitors details (native):', JSON.stringify(monitorsDetails));
+                this._layoutsRows.forEach((lr) =>
+                    lr.updateMonitorName(true, monitorsDetails),
+                );
+                return;
+            } catch (e) {
+                debug('Failed to get monitor names via native API, falling back to subprocess:', e);
+            }
+        }
+
+        // Fallback for GNOME < 49: use subprocess with Gdk
+        debug('_computeMonitorsDetails: using subprocess fallback');
         try {
             // Since Gdk.Monitor has monitor's name but we can't import Gdk into gnome-shell, we run a gjs code in a subprocess.
             // This code will just get all the monitors, printing into JSON format to stdout each monitor's name and geometry.
