@@ -50,6 +50,7 @@ import OverriddenAltTab from './components/altTab/overriddenAltTab';
 import { LayoutSwitcherPopup } from './components/layoutSwitcher/layoutSwitcher';
 import { unmaximizeWindow } from './utils/gnomesupport';
 import * as Config from 'resource:///org/gnome/shell/misc/config.js';
+import { RaiseTogetherManager } from './components/raiseTogether/raiseTogetherManager';
 
 const debug = logger('extension');
 
@@ -62,7 +63,8 @@ export default class TilingShellExtension extends Extension {
     private _keybindings: KeyBindings | null;
     private _resizingManager: ResizingManager | null;
     private _windowBorderManager: WindowBorderManager | null;
-    
+    private _raiseTogetherManager: RaiseTogetherManager | null;
+
     constructor(metadata: ExtensionMetadata) {
         super(metadata);
         this._signals = null;
@@ -73,6 +75,7 @@ export default class TilingShellExtension extends Extension {
         this._keybindings = null;
         this._resizingManager = null;
         this._windowBorderManager = null;
+        this._raiseTogetherManager = null;
     }
 
     createIndicator() {
@@ -157,6 +160,9 @@ export default class TilingShellExtension extends Extension {
             !this._fractionalScalingEnabled,
         );
         this._windowBorderManager.enable();
+
+        this._raiseTogetherManager = new RaiseTogetherManager();
+        this._raiseTogetherManager.enable();
 
         this.createIndicator();
 
@@ -766,6 +772,9 @@ export default class TilingShellExtension extends Extension {
 
         this._windowBorderManager?.destroy();
         this._windowBorderManager = null;
+
+        this._raiseTogetherManager?.destroy();
+        this._raiseTogetherManager = null;
 
         // disable dbus
         this._dbus?.disable();
