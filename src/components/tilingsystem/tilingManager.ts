@@ -389,7 +389,7 @@ export class TilingManager {
             };
         } else if (window.get_monitor() === this._monitor.index) {
             const enlargeFactor = Math.max(
-                64, // if the gaps are all 0 we choose 8 instead
+                64, // if the gaps are all 0 we choose 64 instead
                 tilingLayout.innerGaps.right,
                 tilingLayout.innerGaps.left,
                 tilingLayout.innerGaps.right,
