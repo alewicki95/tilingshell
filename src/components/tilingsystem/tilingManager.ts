@@ -982,7 +982,7 @@ export class TilingManager {
 
         // apply animations when tiling the window
         windowActor.remove_all_transitions();
-        // @ts-expect-error "Main.wm has the private function _prepareAnimationInfo"
+        // @ts-expect-error "Main.wm has the "private" function _prepareAnimationInfo"
         Main.wm._prepareAnimationInfo(
             global.windowManager,
             windowActor,
