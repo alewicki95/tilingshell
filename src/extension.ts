@@ -92,6 +92,15 @@ export default class TilingShellExtension extends Extension {
             Settings.WINDOW_USE_CUSTOM_BORDER_COLOR =
                 Settings.ENABLE_WINDOW_BORDER;
         }
+
+        if (Settings.LAST_VERSION_NAME_INSTALLED !== '17.3') {
+            debug('apply compatibility changes for 17.3');
+
+            // if users used cycle layouts keybinding, enable the backwards one
+            Settings.gioSetting.set_strv(Settings.SETTING_CYCLE_LAYOUTS_BACKWARDS, [
+                `<Shift>${Settings.gioSetting.get_strv(Settings.SETTING_CYCLE_LAYOUTS)}`
+            ]);
+        }
     }
 
     private _onInstall() {
@@ -328,17 +337,19 @@ export default class TilingShellExtension extends Extension {
                 this._keybindings,
                 'cycle-layouts',
                 (
-                    _: KeyBindings,
+                    kb: KeyBindings,
                     dp: Meta.Display,
-                    action: number,
-                    mask: number,
+                    currentAction: number,
+                    mask: number
                 ) => {
+                    const backwardAction = kb.cycleLayoutsBackwardAction;
                     const switcher = new LayoutSwitcherPopup(
-                        action,
+                        kb.cycleLayoutsAction!,
+                        backwardAction!,
                         !this._fractionalScalingEnabled,
                     );
 
-                    if (!switcher.show(false, '', mask)) switcher.destroy();
+                    if (!switcher.show(currentAction === backwardAction, '', mask)) switcher.destroy();
                 },
             );
         }

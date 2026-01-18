@@ -285,6 +285,10 @@
             <default><![CDATA[['']]]></default>
             <summary>Cycle through available workspace layouts</summary>
         </key>
+        <key type="as" name="cycle-layouts-backward">
+            <default><![CDATA[['']]]></default>
+            <summary>Cycle backwards through available workspace layouts</summary>
+        </key>
     </schema>
 
 </schemalist>

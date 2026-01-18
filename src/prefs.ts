@@ -746,6 +746,10 @@ export default class TilingShellExtensionPreferences extends ExtensionPreference
             ],
         ];
 
+        const backwardSettingsKey: Map<string, string> = new Map([
+            [Settings.SETTING_CYCLE_LAYOUTS, Settings.SETTING_CYCLE_LAYOUTS_BACKWARDS],
+        ]);
+
         // set if the keybinding was set or not by the user
         for (let i = 0; i < keybindings.length; i++) {
             keybindings[i][3] =
@@ -759,6 +763,7 @@ export default class TilingShellExtensionPreferences extends ExtensionPreference
 
                 const row = this._buildShortcutButtonRow(
                     settingsKey,
+                    backwardSettingsKey.get(settingsKey),
                     gioSettings,
                     title,
                     subtitle,
@@ -813,6 +818,7 @@ export default class TilingShellExtensionPreferences extends ExtensionPreference
         keybindings.forEach(([settingsKey, title, subtitle]) => {
             const row = this._buildShortcutButtonRow(
                 settingsKey,
+                backwardSettingsKey.get(settingsKey),
                 gioSettings,
                 title,
                 subtitle,
@@ -1288,12 +1294,13 @@ export default class TilingShellExtensionPreferences extends ExtensionPreference
 
     _buildShortcutButtonRow(
         settingsKey: string,
+        backwardKey: string | undefined,
         gioSettings: Gio.Settings,
         title: string,
         subtitle: string | undefined,
         styleClass?: string,
     ) {
-        const btn = new ShortcutSettingButton(settingsKey, gioSettings);
+        const btn = new ShortcutSettingButton(settingsKey, gioSettings, backwardKey);
         if (styleClass) btn.add_css_class(styleClass);
         btn.set_vexpand(false);
         btn.set_valign(Gtk.Align.CENTER);
@@ -1442,8 +1449,9 @@ const ShortcutSettingButton = class extends Gtk.Button {
     private _shortcut: string;
     private _settingsKey: string;
     private _gioSettings: Gio.Settings;
+    private _backwardKey: string | undefined;
 
-    constructor(settingsKey: string, gioSettings: Gio.Settings) {
+    constructor(settingsKey: string, gioSettings: Gio.Settings, backwardKey: string | undefined = undefined) {
         super({
             halign: Gtk.Align.CENTER,
             hexpand: false,
@@ -1461,6 +1469,7 @@ const ShortcutSettingButton = class extends Gtk.Button {
             hexpand: false,
             vexpand: false,
         });
+        this._backwardKey = backwardKey;
 
         // Bind signals
         this.connect('clicked', this._onActivated.bind(this));
@@ -1553,6 +1562,10 @@ const ShortcutSettingButton = class extends Gtk.Button {
         this.shortcut = val;
         this._label.set_accelerator(this.shortcut);
         this._gioSettings.set_strv(this._settingsKey, [this.shortcut]);
+        if (this._backwardKey) {
+            // also update the backward settings key by prepending <Shift>
+            this._gioSettings.set_strv(this._backwardKey, [`<Shift>${this.shortcut}`]);
+        }
         this.emit('changed', this.shortcut);
     }
 
