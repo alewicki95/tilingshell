@@ -747,7 +747,7 @@ export default class TilingShellExtensionPreferences extends ExtensionPreference
         ];
 
         const backwardSettingsKey: Map<string, string> = new Map([
-            [Settings.SETTING_CYCLE_LAYOUTS, Settings.SETTING_CYCLE_LAYOUTS_BACKWARDS],
+            [Settings.SETTING_CYCLE_LAYOUTS, Settings.SETTING_CYCLE_LAYOUTS_BACKWARD],
         ]);
 
         // set if the keybinding was set or not by the user

@@ -143,7 +143,7 @@ export default class Settings {
     static SETTING_FOCUS_WINDOW_PREV = 'focus-window-prev';
     static SETTING_HIGHLIGHT_CURRENT_WINDOW = 'highlight-current-window';
     static SETTING_CYCLE_LAYOUTS = 'cycle-layouts';
-    static SETTING_CYCLE_LAYOUTS_BACKWARDS = 'cycle-layouts-backward';
+    static SETTING_CYCLE_LAYOUTS_BACKWARD = 'cycle-layouts-backward';
 
     static initialize(settings: Gio.Settings) {
         if (this._is_initialized) return;

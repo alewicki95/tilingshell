@@ -97,7 +97,7 @@ export default class TilingShellExtension extends Extension {
             debug('apply compatibility changes for 17.3');
 
             // if users used cycle layouts keybinding, enable the backwards one
-            Settings.gioSetting.set_strv(Settings.SETTING_CYCLE_LAYOUTS_BACKWARDS, [
+            Settings.gioSetting.set_strv(Settings.SETTING_CYCLE_LAYOUTS_BACKWARD, [
                 `<Shift>${Settings.gioSetting.get_strv(Settings.SETTING_CYCLE_LAYOUTS)}`
             ]);
         }

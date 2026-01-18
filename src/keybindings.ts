@@ -267,7 +267,7 @@ export default class KeyBindings extends GObject.Object {
         );
 
         this._cycleLayoutsBackwardAction = Main.wm.addKeybinding(
-            Settings.SETTING_CYCLE_LAYOUTS_BACKWARDS,
+            Settings.SETTING_CYCLE_LAYOUTS_BACKWARD,
             extensionSettings,
             Meta.KeyBindingFlags.IS_REVERSED,
             Shell.ActionMode.NORMAL,
@@ -382,6 +382,7 @@ export default class KeyBindings extends GObject.Object {
         Main.wm.removeKeybinding(Settings.SETTING_FOCUS_WINDOW_PREV);
         Main.wm.removeKeybinding(Settings.SETTING_HIGHLIGHT_CURRENT_WINDOW);
         Main.wm.removeKeybinding(Settings.SETTING_CYCLE_LAYOUTS);
+        Main.wm.removeKeybinding(Settings.SETTING_CYCLE_LAYOUTS_BACKWARD);
     }
 
     private _restoreNatives() {
