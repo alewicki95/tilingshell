@@ -51,7 +51,7 @@ export default class TilingShellExtensionPreferences extends ExtensionPreference
 
         Gtk.IconTheme
             .get_for_display(Gdk.Display.get_default())
-            .add_resource_path(`${RESOURCES_PREFIX}/icons`);
+            .add_resource_path(`${RESOURCES_PREFIX}/icons/scalable/actions`);
     }
 
     /**
@@ -1059,13 +1059,17 @@ export default class TilingShellExtensionPreferences extends ExtensionPreference
             margin_end: 0,
         });
 
+        const settings = Gtk.Settings.get_default();
+        const iconNameByTheme = settings?.gtk_application_prefer_dark_theme ? iconName : `${iconName}-dark`;
+
         const image = new Gtk.Image({
-            iconName: iconName,
+            iconName: iconNameByTheme,
             pixel_size: 96,
             margin_top: distance,
             margin_bottom: distance,
             margin_start: 0,
             margin_end: 0,
+            cssClasses: ['image']
         });
 
         const titleLabel = new Gtk.Label({
