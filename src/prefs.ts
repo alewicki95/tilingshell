@@ -223,7 +223,7 @@ export default class TilingShellExtensionPreferences extends ExtensionPreference
             Settings.KEY_SNAP_ASSIST_SYNC_LAYOUT,
             _('Sync layout when tiling with Snap Assistant'),
             _(
-                'Change the desktop layout to match the layout used when tiling a window with Snap Assistant',
+                'Change the active layout to match the layout used when tiling a window with Snap Assistant',
             ),
         );
         Settings.bind(
