@@ -320,6 +320,20 @@ export default class TilingShellExtensionPreferences extends ExtensionPreference
         );
         behaviourGroup.add(raiseTogetherRow);
 
+        const raiseTogetherCurrentMonitorRow = this._buildSwitchRow(
+            Settings.KEY_RAISE_TOGETHER_CURRENT_MONITOR_ONLY,
+            _('Raise tiled windows together: limit to current display'),
+            _(
+                'When raising tiled windows together, only raise tiled windows on the same display as the window being raised',
+            ),
+        );
+        Settings.bind(
+            Settings.KEY_RAISE_TOGETHER,
+            raiseTogetherCurrentMonitorRow,
+            'sensitive',
+        );
+        behaviourGroup.add(raiseTogetherCurrentMonitorRow);
+
         const syncLayoutRow = this._buildSwitchRow(
             Settings.KEY_SYNC_LAYOUT_ACROSS_WORKSPACES,
             _('Sync layout across workspaces'),
